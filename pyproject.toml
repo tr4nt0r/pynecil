@@ -1,0 +1,72 @@
+[tool.ruff]
+target-version = "py312"
+
+[tool.ruff.lint]
+extend-select = ["I", "TRY", "UP"]
+
+[tool.pytest.ini_options]
+addopts = "--cov=pynecil/ --cov-report=term-missing"
+asyncio_mode = "auto"
+
+[tool.hatch]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.version]
+source = "regex_commit"
+commit_extra_args = ["-e"]
+path = "pynecil/__init__.py"
+
+[tool.hatch.envs.default]
+python = "3.12"
+installer = "uv"
+dependencies = [
+    "mypy==1.8.0",
+    "ruff==0.4.8",
+    "pytest==8.2.2",
+    "pytest-cov==5.0.0",
+    "mkdocs-material==9.5.26",
+    "mkdocstrings[python]==0.25.1",
+    "pytest-asyncio==0.23.7",
+]
+
+[tool.hatch.envs.default.scripts]
+test = "pytest"
+test-cov-xml = "pytest --cov-report=xml"
+lint = [
+  "ruff format .",
+  "ruff --fix .",
+  "mypy pynecil/",
+]
+lint-check = [
+  "ruff format --check .",
+  "ruff .",
+  "mypy pynecil/",
+]
+docs-serve = "mkdocs serve"
+docs-build = "mkdocs build"
+
+[build-system]
+requires = ["hatchling", "hatch-regex-commit"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pynecil"
+authors = [
+  { name = "pynecil", email = "manfred@dennerlein.name" }
+]
+description = "Python library to communicate with Pinecil V2 soldering irons via Bluetooth"
+readme = "README.md"
+dynamic = ["version"]
+classifiers = [
+    "Programming Language :: Python :: 3 :: Only",
+]
+requires-python = ">=3.11"
+dependencies = [
+    "bleak>=0.22.0"
+]
+
+[project.urls]
+Documentation = "https://tr4nt0r.github.io/pynecil/"
+Source = "https://github.com/tr4nt0r/pynecil"

@@ -1,0 +1,27 @@
+{
+  "template": "https://github.com/frankie567/cookiecutter-hipster-pypackage",
+  "commit": "8d08540791a735c0668f08b8025719728c7677f9",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "full_name": "Manfred Dennerlein Rodelo",
+      "email": "manfred@dennerlein.name",
+      "github_username": "tr4nt0r",
+      "project_name": "Pynecil",
+      "dist_name": "pynecil",
+      "package_name": "pynecil",
+      "project_short_description": "Python library to communicate with Pinecil V2 soldering irons via Bluetooth",
+      "repository_name": "tr4nt0r/pynecil",
+      "repository_url": "https://github.com/tr4nt0r/pynecil",
+      "docs_url": "https://tr4nt0r.github.io/pynecil/",
+      "open_source_license": "MIT license",
+      "python_version": "3.12",
+      "asyncio": "Y",
+      "docs_icon": "material/library",
+      "docs_color_primary": "purple",
+      "docs_color_accent": "light blue",
+      "_template": "https://github.com/frankie567/cookiecutter-hipster-pypackage"
+    }
+  },
+  "directory": null
+}
