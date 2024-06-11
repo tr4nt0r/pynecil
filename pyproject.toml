@@ -2,7 +2,8 @@
 target-version = "py312"
 
 [tool.ruff.lint]
-extend-select = ["I", "TRY", "UP", "D"]
+extend-select = ["I", "TRY", "UP", "D", "W"]
+extend-ignore = ["D213", "D202", "D203", "D213", "UP038"]
 
 [tool.pytest.ini_options]
 addopts = "--cov=pynecil/ --cov-report=term-missing"
@@ -41,7 +42,7 @@ lint = [
 ]
 lint-check = [
   "ruff format --check .",
-  "ruff .",
+  "ruff check .",
   "mypy pynecil/",
 ]
 docs-serve = "mkdocs serve"
