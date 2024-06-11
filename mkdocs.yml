@@ -63,5 +63,6 @@ watch:
 
 nav:
     - About: index.md
+    - Contributing: contributing.md
     - Reference:
         - pynecil: reference/pynecil.md
