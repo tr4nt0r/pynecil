@@ -55,13 +55,15 @@ build-backend = "hatchling.build"
 [project]
 name = "pynecil"
 authors = [
-  { name = "pynecil", email = "manfred@dennerlein.name" }
+  { name = "Manfred Dennerlein Rodelo", email = "manfred@dennerlein.name" }
 ]
 description = "Python library to communicate with Pinecil V2 soldering irons via Bluetooth"
 readme = "README.md"
 dynamic = ["version"]
 classifiers = [
     "Programming Language :: Python :: 3 :: Only",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
 ]
 requires-python = ">=3.11"
 dependencies = [
