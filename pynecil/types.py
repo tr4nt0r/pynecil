@@ -1,9 +1,7 @@
 """Types for Pynecil."""
 
-import struct
 from dataclasses import dataclass
 from enum import Enum
-from typing import Self, cast
 
 
 class CharLive(Enum):
@@ -157,21 +155,6 @@ class DeviceInfoResponse:
     device_sn: str | None = None
     name: str | None = None
     is_synced: bool = False
-
-    def decode(self, **kwargs) -> Self:
-        """Parse device info data."""
-        if "build" in kwargs:
-            self.build = cast(bytearray, kwargs["build"]).decode("utf-8")
-        if "device_sn" in kwargs:
-            raw, *_ = struct.unpack("Q", kwargs["device_sn"])
-            self.device_sn = f"{raw:016x}"
-        if "device_id" in kwargs:
-            raw, *_ = struct.unpack("L", kwargs["device_id"])
-            self.device_id = f"{raw:x}"
-        if "is_synced" in kwargs:
-            self.is_synced = kwargs["is_synced"]
-
-        return self
 
 
 @dataclass
