@@ -52,7 +52,7 @@ plugins:
                 import:
                     - https://docs.python.org/3.11/objects.inv
                 options:
-                    docstring_style: google
+                    docstring_style: numpy
 
 watch:
     - docs
