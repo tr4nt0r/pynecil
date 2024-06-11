@@ -29,19 +29,26 @@ from .types import (
 _LOGGER = logging.getLogger(__name__)
 
 
-async def discover() -> BLEDevice | None:
+async def discover(timeout: float = 10) -> BLEDevice | None:
     """Discover Pinecil device.
+
+    Parameters
+    ----------
+    timeout : float, optional
+         Timeout to wait for detection before giving up, by default 10
 
     Returns
     -------
-        BLEDevice | None: The BLEDevice of a Pinecil device or None if not detected
-        before the timeout.
+        BLEDevice | None
+            The BLEDevice of a Pinecil or None if not detected
+            before the timeout.
 
     """
     return await BleakScanner().find_device_by_filter(
         filterfunc=lambda device, advertisement: bool(
             str(const.SVC_UUID_BULK) in advertisement.service_uuids
         ),
+        timeout=timeout,
     )
 
 
@@ -188,7 +195,7 @@ class Pynecil:
 
         Parameters
         ----------
-        characteristic : CharLive | CharSetting | CharBulk
+        characteristic : Characteristic
             Characteristic to retrieve from device.
 
         Returns
@@ -533,14 +540,14 @@ CHARACTERISTICS: dict[Characteristic, tuple] = {
         int,
         lambda x: clip(x, 0, 2),
     ),
-    CharSetting.KEEP_AWAKE_PULSE: (
-        const.CHAR_UUID_SETTINGS_KEEP_AWAKE_PULSE,
-        decode_int,
-        int,
+    CharSetting.KEEP_AWAKE_PULSE_POWER: (
+        const.CHAR_UUID_SETTINGS_KEEP_AWAKE_PULSE_POWER,
+        lambda x: decode_int(x) / 10,
+        lambda x: int(x * 10),
         lambda x: clip(x, 0, 99),
     ),
-    CharSetting.KEEP_AWAKE_PULSE_WAIT: (
-        const.CHAR_UUID_SETTINGS_KEEP_AWAKE_PULSE_WAIT,
+    CharSetting.KEEP_AWAKE_PULSE_DELAY: (
+        const.CHAR_UUID_SETTINGS_KEEP_AWAKE_PULSE_DELAY,
         decode_int,
         int,
         lambda x: clip(x, 0, 9),
@@ -571,8 +578,8 @@ CHARACTERISTICS: dict[Characteristic, tuple] = {
     ),
     CharSetting.POWER_LIMIT: (
         const.CHAR_UUID_SETTINGS_POWER_LIMIT,
-        decode_int,
-        int,
+        lambda x: decode_int(x) / 10,
+        lambda x: int(x * 10),
         lambda x: clip(x, 0, 120),
     ),
     CharSetting.INVERT_BUTTONS: (
@@ -619,8 +626,8 @@ CHARACTERISTICS: dict[Characteristic, tuple] = {
     ),
     CharSetting.PD_NEGOTIATION_TIMEOUT: (
         const.CHAR_UUID_SETTINGS_PD_NEGOTIATION_TIMEOUT,
-        decode_int,
-        int,
+        lambda x,: decode_int(x) / 10,
+        lambda x: int(x * 10),
         lambda x: clip(x, 0, 50),
     ),
     CharSetting.DISPLAY_INVERT: (
@@ -639,25 +646,25 @@ CHARACTERISTICS: dict[Characteristic, tuple] = {
         const.CHAR_UUID_SETTINGS_LOGO_DURATION,
         decode_int,
         int,
-        lambda: 1,
+        lambda x: clip(x, 0, 6),
     ),
     CharSetting.CALIBRATE_CJC: (
         const.CHAR_UUID_SETTINGS_CALIBRATE_CJC,
         decode_int,
         int,
-        lambda: 1,
+        lambda x: clip(x, 0, 1),
     ),
     CharSetting.BLE_ENABLED: (
         const.CHAR_UUID_SETTINGS_BLE_ENABLED,
         decode_int,
         int,
-        lambda: 1,
+        lambda x: 0,
     ),
     CharSetting.USB_PD_MODE: (
         const.CHAR_UUID_SETTINGS_USB_PD_MODE,
         decode_int,
         int,
-        lambda: 1,
+        lambda x: clip(x, 0, 1),
     ),
     CharSetting.SETTINGS_SAVE: (
         const.CHAR_UUID_SETTINGS_SAVE,

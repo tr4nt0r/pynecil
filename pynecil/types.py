@@ -48,8 +48,8 @@ class CharSetting(Characteristic, Enum):
     TEMP_UNIT = 15
     DESC_SCROLL_SPEED = 16
     LOCKING_MODE = 17
-    KEEP_AWAKE_PULSE = 18
-    KEEP_AWAKE_PULSE_WAIT = 19
+    KEEP_AWAKE_PULSE_POWER = 18
+    KEEP_AWAKE_PULSE_DELAY = 19
     KEEP_AWAKE_PULSE_DURATION = 20
     VOLTAGE_DIV = 21
     BOOST_TEMP = 22
@@ -224,7 +224,94 @@ class LiveDataResponse:
 
 @dataclass
 class SettingsDataResponse:
-    """Settings data response class."""
+    """Settings data response class.
+
+    Attributes
+    ----------
+    setpoint_temp: int | None
+        Setpoint temperature (in °C, 10-450)
+    sleep_temp: int | None
+        Temperature to drop to in sleep mode (in °C, 10-450)
+    sleep_timeout: int | None
+        timeout till sleep mode (in minutes , 0-15)
+    min_dc_voltage_cells: int | None
+        Voltage to cut out at for under voltage when powered by DC jack (0-4)
+    min_volltage_per_cell: int | None
+        Minimum allowed voltage per cell (in V, 2.4-3.8, step=0.1)
+    qc_ideal_voltage: int | None
+        QC3.0 maximum voltage (9.0-22.0V, step=0.1)
+    orientation_mode: int | None
+        Screen orientation (0=right-handed, 1=left-handed, 2=Auto)
+    accel_sensitivity: int | None
+        Motion sensitivity (0-9)
+    animation_loop: int | None
+        Animation loop switch (0=off, 1=on)
+    animation_speed: int | None
+        Animation speed (0=off, 1=slow, 2=medium, 3=fast)
+    autostart_mode: int | None
+        Mode to enter on start-up (0=disabled, 1=soldering, 2=sleeping, 3=no heat)
+    shutdown_time: int | None
+        Time until unit shuts down if not moved (in seconds, 0-60)
+    cooling_temp_blink: int | None
+        Blink temperature on the cool down screen until its <50C (0=off, 1=on)
+    idle_screen_details: int | None
+        Show details on idle screen (0=off, 1=on)
+    solder_screen_details: int | None
+        Show details on soldering screen (0=off, 1=on)
+    temp_unit: int | None
+        Temperature unit (0=Celsius, 1=Fahrenheit)
+    desc_scroll_speed: int | None
+        Description scroll speed (0=slow, 1=fast)
+    locking_mode: int | None
+        Allow locking buttons (0=off, 1=boost mode only, 2=full locking)
+    keep_awake_pulse_power: int | None
+        Intensity of power of keep-awake-pulse in W (0-9.9)
+    keep_awake_pulse_delay: int | None
+        Delay before keep-awake-pulse is triggered (1-9 x 2.5s)
+    keep_awake_pulse_duration: int | None
+        Keep-awake-pulse duration (1-9 x 250ms)
+    voltage_div: int | None
+        Voltage divisor factor (360-900)
+    boost_temp: int | None
+        Boost mode set point temperature (in °C, 0-450)
+    calibration_offset: int | None
+        Calibration offset for the installed tip (in µV, 100-2500)
+    power_limit: int | None
+        Maximum power allowed to output (in W, 0-12W, step=0.1)
+    invert_buttons: int | None
+        Change the plus and minus button assigment (0=off, 1=invert)
+    temp_increment_long: int | None
+        Temperature-change-increment on long button press in seconds (5-90)
+    temp_increment_short: int | None
+        Temperature-change-increment on short button press in seconds (1-50)
+    hall_sensitivity: int | None
+        Hall effect sensor sensitivity (0-9)
+    accel_warn_counter: int | None
+        Warning counter when accelerometer could not be detected (0-9)
+    pd_warn_counter: int | None
+        Warning counter when PD interface could not be detected (0-9)
+    ui_language: LanguageCode | None
+        Hashed integer of language code
+    pd_negotiation_timeout: int | None
+        Power delivery negotiation timeout in seconds (0-5.0, step=0.1)
+    display_invert: int | None
+        Invert colors of display (0=off, 1=on)
+    display_brightness: int | None
+        Display brightness (1-5)
+    logo_duration: int | None
+        Boot logo duration (0=off, 1-5=seconds, 6=loop ∞)
+    calibrate_cjc: int | None
+        Enable CJC calibration at next boot
+    ble_enabled: int | None
+        Disable BLE
+    usb_pd_mode: int | None
+        PPS & EPR USB Power delivery mode (0=off, 1=on)
+    settings_save: int | None
+        Save settings to flash
+    settings_reset: int | None
+        Reset settings to default values
+
+    """
 
     setpoint_temp: int | None = None
     sleep_temp: int | None = None
@@ -244,8 +331,8 @@ class SettingsDataResponse:
     temp_unit: int | None = None
     desc_scroll_speed: int | None = None
     locking_mode: int | None = None
-    keep_awake_pulse: int | None = None
-    keep_awake_pulse_wait: int | None = None
+    keep_awake_pulse_power: int | None = None
+    keep_awake_pulse_delay: int | None = None
     keep_awake_pulse_duration: int | None = None
     voltage_div: int | None = None
     boost_temp: int | None = None
