@@ -1,4 +1,4 @@
-"""Client for Pinecil V2 devices."""
+"""Pynecil - Python library to communicate with Pinecil V2 soldering irons via Bluetooth."""
 
 from __future__ import annotations
 
@@ -15,6 +15,7 @@ from bleak.exc import BleakError
 from . import const
 from .exceptions import CommunicationError
 from .types import (
+    Characteristic,
     CharBulk,
     CharLive,
     CharSetting,
@@ -45,19 +46,7 @@ async def discover() -> BLEDevice | None:
 
 
 class Pynecil:
-    """Client for Pinecil V2 Devices.
-
-    Parameters
-    ----------
-    ble_device : BLEDevice | str
-         Bluetooth address of the Pinecil V2 device to connect to or BLEDevice object,
-         received from a BleakScanner, representing it.
-    disconnected_callback : Callable[[BleakClient], None] | None, optional
-        Callback passed to BleakClient that will be scheduled in the event loop
-        when the client is disconnected. The callable must take one argument,
-        which will be the client object, by default None
-
-    """
+    """Client for Pinecil V2 Devices."""
 
     client_disconnected: bool = False
 
@@ -66,7 +55,19 @@ class Pynecil:
         address_or_ble_device: BLEDevice | str,
         disconnected_callback: Callable[[BleakClient], None] | None = None,
     ) -> None:
-        """Initialize Pynecil client."""
+        """Initialize a Pynecil client.
+
+        Parameters
+        ----------
+        address_or_ble_device : BLEDevice | str
+            Bluetooth address of the Pinecil V2 device to connect to or BLEDevice object,
+            received from a BleakScanner, representing it.
+        disconnected_callback : Callable[[BleakClient], None] | None, optional
+            Callback passed to BleakClient that will be scheduled in the event loop
+            when the client is disconnected. The callable must take one argument,
+            which will be the client object, by default None
+
+        """
         if isinstance(address_or_ble_device, BLEDevice):
             self.device_info = DeviceInfoResponse(
                 name=address_or_ble_device.name, address=address_or_ble_device.address
@@ -83,7 +84,7 @@ class Pynecil:
             disconnected_callback=disconnected_callback or _disconnected_callback,
         )
 
-    async def connect(self):
+    async def connect(self) -> None:
         """Establish connection.
 
         Establishes a connection to the device, if not already connected, and closes
@@ -95,8 +96,8 @@ class Pynecil:
                 await self.disconnect()
             await self._client.connect()
 
-    async def disconnect(self):
-        """Disconnect connection."""
+    async def disconnect(self) -> None:
+        """Disconnect from the Pinecil device."""
         await self._client.disconnect()
         self.client_disconnected = False
 
@@ -182,8 +183,25 @@ class Pynecil:
             )
         }
 
-    async def read(self, characteristic: CharLive | CharSetting | CharBulk) -> Any:
-        """Read characteristic."""
+    async def read(self, characteristic: Characteristic) -> Any:
+        """Read specified characteristic and decode the result.
+
+        Parameters
+        ----------
+        characteristic : CharLive | CharSetting | CharBulk
+            Characteristic to retrieve from device.
+
+        Returns
+        -------
+        Any
+            Value read from characteristic and parsed with the corresponding decoder.
+
+        Raises
+        ------
+        CommunicationError
+            If an error occurred while connecting and retrieving data from device.
+
+        """
         uuid, decode, *_ = CHARACTERISTICS[characteristic]
         if not decode:
             return
@@ -208,19 +226,55 @@ class Pynecil:
             raise CommunicationError from e
 
 
-def decode_int(raw: bytearray) -> int:
-    """Decode uint32."""
-    return int.from_bytes(raw, byteorder="little", signed=False)
+def decode_int(value: bytearray) -> int:
+    """Decode byte value to an integer.
+
+    Parameters
+    ----------
+    value : bytearray
+        The byte encoded integer value.
+
+    Returns
+    -------
+    int
+        Value as integer.
+
+    """
+    return int.from_bytes(value, byteorder="little", signed=False)
 
 
-def decode_str(raw: bytearray) -> str:
-    """Decode uint32."""
-    return raw.decode("utf-8")
+def decode_str(value: bytearray) -> str:
+    """Decode byte encoded string.
+
+    Parameters
+    ----------
+    value : bytearray
+        A byte encoded string.
+
+    Returns
+    -------
+    str
+        A decoded string value.
+
+    """
+    return value.decode("utf-8")
 
 
-def decode_live_data(raw: bytearray) -> LiveDataResponse:
-    """Parse bytearray from bulk live data."""
-    data = struct.unpack("14I", raw)
+def decode_live_data(value: bytearray) -> LiveDataResponse:
+    """Parse bytearray from bulk live data.
+
+    Parameters
+    ----------
+    value : bytearray
+        Byte value from bulk live data characteristic.
+
+    Returns
+    -------
+    LiveDataResponse
+        All 14 values from bul live data decoded and normalized.
+
+    """
+    data = struct.unpack("14I", value)
     return LiveDataResponse(
         data[0],
         data[1],
@@ -240,25 +294,85 @@ def decode_live_data(raw: bytearray) -> LiveDataResponse:
 
 
 def clip(a: int, a_min: int, a_max: int) -> int:
-    """Clamp a value between max and min limits."""
+    """Clip a value between max and min.
+
+    Validate if the value is between the defined limits and set
+    it to the max/min value if it exceeds one of them.
+
+    Parameters
+    ----------
+    a : int
+        The value to clip
+    a_min : int
+        The lower limit for the value
+    a_max : int
+        The upper limit for the value
+
+    Returns
+    -------
+    int
+        The value if it is between the limits or min/max if it exceeds one of them.
+
+    """
     a = min(a, a_max)
     return max(a, a_min)
 
 
-def encode_int(val: int) -> bytes:
-    """Encode integer as byte."""
-    return val.to_bytes(2, byteorder="little", signed=False)
+def encode_int(value: int) -> bytes:
+    """Encode integer as byte.
+
+    Parameters
+    ----------
+    value : int
+        An integer value.
+
+    Returns
+    -------
+    bytes
+        The byte encoded value as unsigned little-endian of 2 bytes length.
+
+    """
+    return value.to_bytes(2, byteorder="little", signed=False)
 
 
-def encode_lang_code(val: str | LanguageCode) -> int:
-    """Encode language code to corresponding byte value."""
-    if isinstance(val, LanguageCode):
-        return int(val.value)
-    return int(hashlib.sha1(val.encode("utf-8")).hexdigest(), 16) % 0xFFFF
+def encode_lang_code(language_code: str | LanguageCode) -> int:
+    """Encode language code to its hashed integer representation.
+
+    ironOS stores languages as hashed integer representations of the language code.
+    This method uses the same hash algorithm used in ironOS.
+
+    Parameters
+    ----------
+    language_code : str | LanguageCode
+        The language code as a string or as member of `LanguageCode`
+
+    Returns
+    -------
+    int
+        The value of the `LanguageCode` member or
+        the hashed integer value of language_code.
+
+    """
+    if isinstance(language_code, LanguageCode):
+        return int(language_code.value)
+    return int(hashlib.sha1(language_code.encode("utf-8")).hexdigest(), 16) % 0xFFFF
 
 
 def decode_lang_code(raw: bytearray) -> LanguageCode | int | None:
-    """Decode hashed value to language code."""
+    """Decode hashed value to language code.
+
+    Parameters
+    ----------
+    raw : bytearray
+        A byte encoded integer value.
+
+    Returns
+    -------
+    LanguageCode | int | None
+        The `LanguageCode` corresponding to the hashed interger value or the integer
+        if could not be matched to a known language codes.
+
+    """
     try:
         return LanguageCode(decode_int(raw))
     except ValueError:
@@ -266,7 +380,7 @@ def decode_lang_code(raw: bytearray) -> LanguageCode | int | None:
 
 
 # Define uuid, decoding, encoding and input sanitizing methods for each characteristic
-CHARACTERISTICS: dict[CharLive | CharSetting | CharBulk, tuple] = {
+CHARACTERISTICS: dict[Characteristic, tuple] = {
     CharBulk.LIVE_DATA: (const.CHAR_UUID_BULK_LIVE_DATA, decode_live_data),
     CharBulk.BUILD: (const.CHAR_UUID_BULK_BUILD, decode_str),
     CharBulk.DEVICE_SN: (

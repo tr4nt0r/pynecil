@@ -4,7 +4,11 @@ from dataclasses import dataclass
 from enum import Enum
 
 
-class CharLive(Enum):
+class Characteristic(Enum):
+    """Base class for Characteristics."""
+
+
+class CharLive(Characteristic, Enum):
     """Characteristics from live service."""
 
     LIVE_TEMP = 0
@@ -23,7 +27,7 @@ class CharLive(Enum):
     ESTIMATED_POWER = 13
 
 
-class CharSetting(Enum):
+class CharSetting(Characteristic, Enum):
     """Characteristics from settings service."""
 
     SETPOINT_TEMP = 0
@@ -69,15 +73,8 @@ class CharSetting(Enum):
     SETTINGS_SAVE = 99
 
 
-class CharBulk(Enum):
-    """Characteristics from bulk service.
-
-    Parameters
-    ----------
-    Enum : int
-        Names and IDs of the characteristics in the bulk service.
-
-    """
+class CharBulk(Characteristic, Enum):
+    """Characteristics from bulk service."""
 
     LIVE_DATA = 0
     ACCEL_NAME = 1
@@ -147,7 +144,22 @@ class LanguageCode(Enum):
 
 @dataclass
 class DeviceInfoResponse:
-    """Response data with information about the Pinecil device."""
+    """Response data with information about the Pinecil device.
+
+    Attributes
+    ----------
+    build: str | None
+        ironOS build version of the device (e.g. 2.22)
+    device_id:  str | None
+        Identifier of the device
+    address: str | None
+        Bluetooth address of the device
+    device_sn: str | None
+        Serial number of the device
+    name: str | None
+        Name of the device
+
+    """
 
     build: str | None = None
     device_id: str | None = None
@@ -159,7 +171,40 @@ class DeviceInfoResponse:
 
 @dataclass
 class LiveDataResponse:
-    """Live data response class."""
+    """Live data response class.
+
+    Attributes
+    ----------
+    live_temp: int | None
+        Temperature of the tip (in °C)
+    set_temp: int | None
+        Setpoint temperature (in °C)
+    dc_input: float | None
+        DC input voltage
+    handle_temp: float | None
+        Handle temperature (in °C)
+    power_level: int | None
+        Power level (0-100%)
+    power_src: PowerSource | None
+        Power source (e.g. USB-PD/QC or DC)
+    tip_res: float | None
+        Resistance of the tip (in Ω)
+    uptime: int | None
+        Uptime of the device (in seconds)
+    movement: int | None
+        Last movement time (in seconds)
+    max_temp: int | None
+        Maximum temperature supported by the tip
+    raw_tip: float | None
+        Raw tip voltage (in mV)
+    hall_sensor: int | None
+        Hall effect strength (if hall sensor is installed)
+    op_mode: OperatingMode | None
+        Current operating mode of the device (e.g. soldering, idle...)
+    est_power: float | None
+        Estimated power usage (in Watt)
+
+    """
 
     live_temp: int | None = None
     set_temp: int | None = None

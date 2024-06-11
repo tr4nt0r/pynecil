@@ -1,4 +1,4 @@
-"""Python library to communicate with Pinecil V2 soldering irons via Bluetooth"""
+"""Pynecil - Python library to communicate with Pinecil V2 soldering irons via Bluetooth."""
 
 __version__ = "0.0.0"
 
@@ -9,20 +9,24 @@ from .types import (
     CharLive,
     CharSetting,
     DeviceInfoResponse,
+    LanguageCode,
     LiveDataResponse,
     OperatingMode,
     PowerSource,
+    SettingsDataResponse,
 )
 
 __all__ = [
     "CharBulk",
     "CharLive",
     "CharSetting",
-    "Pynecil",
     "CommunicationError",
     "DeviceInfoResponse",
     "discover",
+    "LanguageCode",
     "LiveDataResponse",
     "OperatingMode",
     "PowerSource",
+    "Pynecil",
+    "SettingsDataResponse",
 ]
