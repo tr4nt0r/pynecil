@@ -72,7 +72,14 @@ class CharSetting(Enum):
 
 
 class CharBulk(Enum):
-    """Characteristics from bulk service."""
+    """Characteristics from bulk service.
+
+    Parameters
+    ----------
+    Enum : int
+        Names and IDs of the characteristics in the bulk service.
+
+    """
 
     LIVE_DATA = 0
     ACCEL_NAME = 1
@@ -153,7 +160,6 @@ class DeviceInfoResponse:
 
     def decode(self, **kwargs) -> Self:
         """Parse device info data."""
-
         if "build" in kwargs:
             self.build = cast(bytearray, kwargs["build"]).decode("utf-8")
         if "device_sn" in kwargs:

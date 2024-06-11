@@ -2,7 +2,7 @@
 target-version = "py312"
 
 [tool.ruff.lint]
-extend-select = ["I", "TRY", "UP"]
+extend-select = ["I", "TRY", "UP", "D"]
 
 [tool.pytest.ini_options]
 addopts = "--cov=pynecil/ --cov-report=term-missing"

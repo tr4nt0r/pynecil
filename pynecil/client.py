@@ -1,4 +1,4 @@
-"""Parser for Pinecil V2 devices."""
+"""Client for Pinecil V2 devices."""
 
 from __future__ import annotations
 
@@ -29,7 +29,14 @@ _LOGGER = logging.getLogger(__name__)
 
 
 async def discover() -> BLEDevice | None:
-    """Discover Pinecil devices."""
+    """Discover Pinecil device.
+
+    Returns
+    -------
+        BLEDevice | None: The BLEDevice of a Pinecil device or None if not detected
+        before the timeout.
+
+    """
     return await BleakScanner().find_device_by_filter(
         filterfunc=lambda device, advertisement: bool(
             str(const.SVC_UUID_BULK) in advertisement.service_uuids
@@ -37,31 +44,52 @@ async def discover() -> BLEDevice | None:
     )
 
 
-class Client:
-    """Parser for Pinecil V2 Devices."""
+class Pynecil:
+    """Client for Pinecil V2 Devices.
+
+    Parameters
+    ----------
+    ble_device : BLEDevice | str
+         Bluetooth address of the Pinecil V2 device to connect to or BLEDevice object,
+         received from a BleakScanner, representing it.
+    disconnected_callback : Callable[[BleakClient], None] | None, optional
+        Callback passed to BleakClient that will be scheduled in the event loop
+        when the client is disconnected. The callable must take one argument,
+        which will be the client object, by default None
+
+    """
 
     client_disconnected: bool = False
 
     def __init__(
         self,
-        ble_device: BLEDevice,
+        address_or_ble_device: BLEDevice | str,
         disconnected_callback: Callable[[BleakClient], None] | None = None,
     ) -> None:
-        self.device_info = DeviceInfoResponse(
-            name=ble_device.name, address=ble_device.address
-        )
+        """Initialize Pynecil client."""
+        if isinstance(address_or_ble_device, BLEDevice):
+            self.device_info = DeviceInfoResponse(
+                name=address_or_ble_device.name, address=address_or_ble_device.address
+            )
+        else:
+            self.device_info = DeviceInfoResponse(address=address_or_ble_device)
 
         def _disconnected_callback(client: BleakClient) -> None:
             _LOGGER.debug("Disconnected from %s", client.address)
             self.client_disconnected = True
 
         self._client = BleakClient(
-            ble_device,
+            address_or_ble_device,
             disconnected_callback=disconnected_callback or _disconnected_callback,
         )
 
     async def connect(self):
-        """Establish connection."""
+        """Establish connection.
+
+        Establishes a connection to the device, if not already connected, and closes
+        previously opened stale connections if an unexpected disconnect occurred.
+
+        """
         if not self._client.is_connected:
             if self.client_disconnected:  # close stale connection
                 await self.disconnect()
@@ -73,7 +101,20 @@ class Client:
         self.client_disconnected = False
 
     async def get_device_info(self) -> DeviceInfoResponse:
-        """Get device info."""
+        """Get device info.
+
+        Returns
+        -------
+        DeviceInfoResponse
+            Object containing `name`, `address`, `build`, `device_sn` and `device_id` of
+            the Pinecil V2 device connected.
+
+        Raises
+        ------
+        CommunicationError
+            If an error occurred while connecting and retrieving data from device.
+
+        """
         if self.device_info.is_synced:
             return self.device_info
 
@@ -89,15 +130,45 @@ class Client:
         return self.device_info
 
     async def get_live_data(self) -> LiveDataResponse:
-        """Get live sensor data."""
+        """Get live sensor data.
 
+        Returns
+        -------
+        LiveDataResponse
+            Object containing 14 values retrieved from the
+            bulk live data characteristic.
+
+        Raises
+        ------
+        CommunicationError
+            If an error occurred while connecting and retrieving data from device.
+
+        """
         return await self.read(CharBulk.LIVE_DATA)
 
     async def get_settings(
         self, settings: list[CharSetting | int] | None = None
     ) -> dict[str, Any]:
-        """Get settings data."""
+        """Get settings data.
 
+        Parameters
+        ----------
+        settings : list[CharSetting  |  int] | None, optional
+            List of Settings identified by a `CharSetting` item or their ID that should
+            be retrieved from the device. Retrieves all Settings if ommited.
+
+        Returns
+        -------
+        dict[str, Any]
+            Dict with name (lowercase) and normalized values of the settings retrieved
+            from the device.
+
+        Raises
+        ------
+        CommunicationError
+            If an error occurred while connecting and retrieving data from device.
+
+        """
         if settings is None:
             settings = []
         return {

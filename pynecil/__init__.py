@@ -2,7 +2,7 @@
 
 __version__ = "0.0.0"
 
-from .client import Client, discover
+from .client import Pynecil, discover
 from .exceptions import CommunicationError
 from .types import (
     CharBulk,
@@ -18,7 +18,7 @@ __all__ = [
     "CharBulk",
     "CharLive",
     "CharSetting",
-    "Client",
+    "Pynecil",
     "CommunicationError",
     "DeviceInfoResponse",
     "discover",

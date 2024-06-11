@@ -17,5 +17,7 @@
         "source.organizeImports": "explicit"
       },
       "editor.defaultFormatter": "charliermarsh.ruff"
-    }
+    },
+    "autoDocstring.docstringFormat": "numpy",
+    "editor.defaultFormatter": "charliermarsh.ruff"
   }
