@@ -190,9 +190,9 @@ class LiveDataResponse:
         Power source (e.g. USB-PD/QC or DC)
     tip_res: float | None
         Resistance of the tip (in Ω)
-    uptime: int | None
+    uptime: float | None
         Uptime of the device (in seconds)
-    movement: int | None
+    movement: float | None
         Last movement time (in seconds)
     max_temp: int | None
         Maximum temperature supported by the tip
@@ -214,8 +214,8 @@ class LiveDataResponse:
     power_level: int | None = None
     power_src: PowerSource | None = None
     tip_res: float | None = None
-    uptime: int | None = None
-    movement: int | None = None
+    uptime: float | None = None
+    movement: float | None = None
     max_temp: int | None = None
     raw_tip: float | None = None
     hall_sensor: int | None = None

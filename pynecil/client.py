@@ -292,8 +292,8 @@ def decode_live_data(value: bytearray) -> LiveDataResponse:
         int(data[4] / 255 * 100),
         PowerSource(data[5]),
         data[6] / 10,
-        data[7],
-        data[8],
+        data[7] / 10,
+        data[8] / 10,
         data[9],
         data[10] / 1000,
         data[11],
@@ -422,8 +422,14 @@ CHAR_MAP: dict[Characteristic, tuple] = {
         const.CHAR_UUID_LIVE_TIP_RESISTANCE,
         lambda x: decode_int(x) / 10,
     ),
-    CharLive.UPTIME: (const.CHAR_UUID_LIVE_UPTIME, decode_int),
-    CharLive.MOVEMENT_TIME: (const.CHAR_UUID_LIVE_MOVEMENT_TIME, decode_int),
+    CharLive.UPTIME: (
+        const.CHAR_UUID_LIVE_UPTIME,
+        lambda x: decode_int(x) / 10,
+    ),
+    CharLive.MOVEMENT_TIME: (
+        const.CHAR_UUID_LIVE_MOVEMENT_TIME,
+        lambda x: decode_int(x) / 10,
+    ),
     CharLive.TIP_VOLTAGE: (
         const.CHAR_UUID_LIVE_TIP_VOLTAGE,
         lambda x: decode_int(x) / 1000,  # convert to mVolt
