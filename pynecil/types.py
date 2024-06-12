@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass
 from enum import Enum
+from typing import TypedDict
 
 
 class Characteristic(Enum):
@@ -223,7 +224,7 @@ class LiveDataResponse:
 
 
 @dataclass
-class SettingsDataResponse:
+class SettingsDataResponse(TypedDict, total=False):
     """Settings data response class.
 
     Attributes
@@ -313,44 +314,44 @@ class SettingsDataResponse:
 
     """
 
-    setpoint_temp: int | None = None
-    sleep_temp: int | None = None
-    sleep_timeout: int | None = None
-    min_dc_voltage_cells: int | None = None
-    min_volltage_per_cell: int | None = None
-    qc_ideal_voltage: int | None = None
-    orientation_mode: int | None = None
-    accel_sensitivity: int | None = None
-    animation_loop: int | None = None
-    animation_speed: int | None = None
-    autostart_mode: int | None = None
-    shutdown_time: int | None = None
-    cooling_temp_blink: int | None = None
-    idle_screen_details: int | None = None
-    solder_screen_details: int | None = None
-    temp_unit: int | None = None
-    desc_scroll_speed: int | None = None
-    locking_mode: int | None = None
-    keep_awake_pulse_power: int | None = None
-    keep_awake_pulse_delay: int | None = None
-    keep_awake_pulse_duration: int | None = None
-    voltage_div: int | None = None
-    boost_temp: int | None = None
-    calibration_offset: int | None = None
-    power_limit: int | None = None
-    invert_buttons: int | None = None
-    temp_increment_long: int | None = None
-    temp_increment_short: int | None = None
-    hall_sensitivity: int | None = None
-    accel_warn_counter: int | None = None
-    pd_warn_counter: int | None = None
-    ui_language: LanguageCode | None = None
-    pd_negotiation_timeout: int | None = None
-    display_invert: int | None = None
-    display_brightness: int | None = None
-    logo_duration: int | None = None
-    calibrate_cjc: int | None = None
-    ble_enabled: int | None = None
-    usb_pd_mode: int | None = None
-    settings_save: int | None = None
-    settings_reset: int | None = None
+    setpoint_temp: int | None
+    sleep_temp: int | None
+    sleep_timeout: int | None
+    min_dc_voltage_cells: int | None
+    min_volltage_per_cell: int | None
+    qc_ideal_voltage: int | None
+    orientation_mode: int | None
+    accel_sensitivity: int | None
+    animation_loop: int | None
+    animation_speed: int | None
+    autostart_mode: int | None
+    shutdown_time: int | None
+    cooling_temp_blink: int | None
+    idle_screen_details: int | None
+    solder_screen_details: int | None
+    temp_unit: int | None
+    desc_scroll_speed: int | None
+    locking_mode: int | None
+    keep_awake_pulse_power: int | None
+    keep_awake_pulse_delay: int | None
+    keep_awake_pulse_duration: int | None
+    voltage_div: int | None
+    boost_temp: int | None
+    calibration_offset: int | None
+    power_limit: int | None
+    invert_buttons: int | None
+    temp_increment_long: int | None
+    temp_increment_short: int | None
+    hall_sensitivity: int | None
+    accel_warn_counter: int | None
+    pd_warn_counter: int | None
+    ui_language: LanguageCode | None
+    pd_negotiation_timeout: int | None
+    display_invert: int | None
+    display_brightness: int | None
+    logo_duration: int | None
+    calibrate_cjc: int | None
+    ble_enabled: int | None
+    usb_pd_mode: int | None
+    settings_save: int | None
+    settings_reset: int | None

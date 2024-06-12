@@ -6,7 +6,7 @@ import hashlib
 import logging
 import struct
 from collections.abc import Callable
-from typing import Any
+from typing import Any, cast
 
 from bleak import BleakClient, BleakScanner
 from bleak.backends.device import BLEDevice
@@ -24,6 +24,7 @@ from .types import (
     LiveDataResponse,
     OperatingMode,
     PowerSource,
+    SettingsDataResponse,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -156,7 +157,7 @@ class Pynecil:
 
     async def get_settings(
         self, settings: list[CharSetting | int] | None = None
-    ) -> dict[str, Any]:
+    ) -> SettingsDataResponse:
         """Get settings data.
 
         Parameters
@@ -179,9 +180,9 @@ class Pynecil:
         """
         if settings is None:
             settings = []
-        return {
+        result = {
             characteristic.name.lower(): await self.read(characteristic)
-            for characteristic in CHARACTERISTICS
+            for characteristic in CHAR_MAP
             if isinstance(characteristic, CharSetting)
             and (
                 not settings
@@ -189,6 +190,7 @@ class Pynecil:
                 or characteristic.value in settings
             )
         }
+        return cast(SettingsDataResponse, result)
 
     async def read(self, characteristic: Characteristic) -> Any:
         """Read specified characteristic and decode the result.
@@ -209,9 +211,9 @@ class Pynecil:
             If an error occurred while connecting and retrieving data from device.
 
         """
-        uuid, decode, *_ = CHARACTERISTICS[characteristic]
+        uuid, decode, *_ = CHAR_MAP[characteristic]
         if not decode:
-            return
+            return None
         try:
             await self.connect()
             result = await self._client.read_gatt_char(uuid)
@@ -223,7 +225,7 @@ class Pynecil:
 
     async def write(self, setting: CharSetting, value: Any) -> None:
         """Write characteristic."""
-        uuid, _, convert, validate = CHARACTERISTICS[setting]
+        uuid, _, convert, validate = CHAR_MAP[setting]
         data = validate(convert(value))
         try:
             await self.connect()
@@ -386,8 +388,8 @@ def decode_lang_code(raw: bytearray) -> LanguageCode | int | None:
         return decode_int(raw)
 
 
-# Define uuid, decoding, encoding and input sanitizing methods for each characteristic
-CHARACTERISTICS: dict[Characteristic, tuple] = {
+# Map uuid, decoding, encoding and input sanitizing methods for each characteristic
+CHAR_MAP: dict[Characteristic, tuple] = {
     CharBulk.LIVE_DATA: (const.CHAR_UUID_BULK_LIVE_DATA, decode_live_data),
     CharBulk.BUILD: (const.CHAR_UUID_BULK_BUILD, decode_str),
     CharBulk.DEVICE_SN: (
@@ -568,7 +570,7 @@ CHARACTERISTICS: dict[Characteristic, tuple] = {
         const.CHAR_UUID_SETTINGS_BOOST_TEMP,
         decode_int,
         int,
-        lambda x: clip(x, 0, 450),
+        lambda x: clip(x, 250, 450) if x != 0 else 0,
     ),
     CharSetting.CALIBRATION_OFFSET: (
         const.CHAR_UUID_SETTINGS_CALIBRATION_OFFSET,
