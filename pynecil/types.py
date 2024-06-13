@@ -16,7 +16,7 @@ class CharLive(Characteristic, Enum):
     SETPOINT_TEMP = 1
     DC_VOLTAGE = 2
     HANDLE_TEMP = 3
-    PWMLEVEL = 4
+    PWM_LEVEL = 4
     POWER_SRC = 5
     TIP_RESISTANCE = 6
     UPTIME = 7
@@ -178,49 +178,49 @@ class LiveDataResponse:
     ----------
     live_temp: int | None
         Temperature of the tip (in °C)
-    set_temp: int | None
+    setpoint_temp: int | None
         Setpoint temperature (in °C)
-    dc_input: float | None
+    dc_voltage: float | None
         DC input voltage
     handle_temp: float | None
         Handle temperature (in °C)
-    power_level: int | None
+    pwm_level: int | None
         Power level (0-100%)
     power_src: PowerSource | None
         Power source (e.g. USB-PD/QC or DC)
-    tip_res: float | None
+    tip_resistance: float | None
         Resistance of the tip (in Ω)
     uptime: float | None
         Uptime of the device (in seconds)
-    movement: float | None
+    movement_time: float | None
         Last movement time (in seconds)
-    max_temp: int | None
-        Maximum temperature supported by the tip
-    raw_tip: float | None
+    max_tip_temp_ability: int | None
+        Maximum temperature supported by the tip (in °C)
+    tip_voltage: float | None
         Raw tip voltage (in mV)
     hall_sensor: int | None
         Hall effect strength (if hall sensor is installed)
-    op_mode: OperatingMode | None
+    operating_mode: OperatingMode | None
         Current operating mode of the device (e.g. soldering, idle...)
-    est_power: float | None
+    estimated_power: float | None
         Estimated power usage (in Watt)
 
     """
 
     live_temp: int | None = None
-    set_temp: int | None = None
-    dc_input: float | None = None
+    setpoint_temp: int | None = None
+    dc_voltage: float | None = None
     handle_temp: float | None = None
-    power_level: int | None = None
+    pwm_level: int | None = None
     power_src: PowerSource | None = None
-    tip_res: float | None = None
+    tip_resistance: float | None = None
     uptime: float | None = None
-    movement: float | None = None
-    max_temp: int | None = None
-    raw_tip: float | None = None
+    movement_time: float | None = None
+    max_tip_temp_ability: int | None = None
+    tip_voltage: float | None = None
     hall_sensor: int | None = None
-    op_mode: OperatingMode | None = None
-    est_power: float | None = None
+    operating_mode: OperatingMode | None = None
+    estimated_power: float | None = None
 
 
 class SettingsDataResponse(TypedDict, total=False):

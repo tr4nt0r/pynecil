@@ -410,8 +410,8 @@ CHAR_MAP: dict[Characteristic, tuple] = {
         const.CHAR_UUID_LIVE_HANDLE_TEMP,
         lambda x: decode_int(x) / 10,
     ),
-    CharLive.PWMLEVEL: (
-        const.CHAR_UUID_LIVE_PWMLEVEL,
+    CharLive.PWM_LEVEL: (
+        const.CHAR_UUID_LIVE_PWM_LEVEL,
         lambda x: int(decode_int(x) / 255 * 100),  # convert to percent
     ),
     CharLive.POWER_SRC: (
