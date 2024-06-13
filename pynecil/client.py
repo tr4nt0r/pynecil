@@ -5,8 +5,7 @@ from __future__ import annotations
 import hashlib
 import logging
 import struct
-from collections.abc import Callable
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
 from bleak import BleakClient, BleakScanner
 from bleak.backends.device import BLEDevice
@@ -27,6 +26,9 @@ from .types import (
     SettingsDataResponse,
 )
 
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -46,7 +48,7 @@ async def discover(timeout: float = 10) -> BLEDevice | None:
 
     """
     return await BleakScanner().find_device_by_filter(
-        filterfunc=lambda device, advertisement: bool(
+        filterfunc=lambda _, advertisement: bool(
             str(const.SVC_UUID_BULK) in advertisement.service_uuids
         ),
         timeout=timeout,
@@ -410,8 +412,8 @@ CHAR_MAP: dict[Characteristic, tuple] = {
         const.CHAR_UUID_LIVE_HANDLE_TEMP,
         lambda x: decode_int(x) / 10,
     ),
-    CharLive.PWMLEVEL: (
-        const.CHAR_UUID_LIVE_PWMLEVEL,
+    CharLive.PWM_LEVEL: (
+        const.CHAR_UUID_LIVE_PWM_LEVEL,
         lambda x: int(decode_int(x) / 255 * 100),  # convert to percent
     ),
     CharLive.POWER_SRC: (
@@ -666,7 +668,7 @@ CHAR_MAP: dict[Characteristic, tuple] = {
         const.CHAR_UUID_SETTINGS_BLE_ENABLED,
         decode_int,
         int,
-        lambda x: 0,
+        lambda _: 0,
     ),
     CharSetting.USB_PD_MODE: (
         const.CHAR_UUID_SETTINGS_USB_PD_MODE,
@@ -678,12 +680,12 @@ CHAR_MAP: dict[Characteristic, tuple] = {
         const.CHAR_UUID_SETTINGS_SAVE,
         decode_int,
         int,
-        lambda x: 1,
+        lambda _: 1,
     ),
     CharSetting.SETTINGS_RESET: (
         const.CHAR_UUID_SETTINGS_RESET,
         decode_int,
         int,
-        lambda x: 1,
+        lambda _: 1,
     ),
 }
