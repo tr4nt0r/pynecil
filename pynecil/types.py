@@ -223,7 +223,6 @@ class LiveDataResponse:
     est_power: float | None = None
 
 
-@dataclass
 class SettingsDataResponse(TypedDict, total=False):
     """Settings data response class.
 
