@@ -56,7 +56,15 @@ async def discover(timeout: float = 10) -> BLEDevice | None:
 
 
 class Pynecil:
-    """Client for Pinecil V2 Devices."""
+    """Client for Pinecil V2 Devices.
+
+    Attributes
+    ----------
+    client_disconnected : bool
+        Flag indicating whether the client has experienced an unexpected disconnect.
+        Defaults to False.
+
+    """
 
     client_disconnected: bool = False
 
@@ -75,7 +83,17 @@ class Pynecil:
         disconnected_callback : Callable[[BleakClient], None] | None, optional
             Callback passed to BleakClient that will be scheduled in the event loop
             when the client is disconnected. The callable must take one argument,
-            which will be the client object, by default None
+            which will be the client object. Defaults to None.
+
+        Notes
+        -----
+        If `address_or_ble_device` is a BLEDevice object, `device_info` will be initialized
+        with its `name` and `address`. Otherwise, `device_info` will only have an `address`
+        initialized.
+
+        Callbacks for disconnection events can be specified via `disconnected_callback`.
+        If not provided, a default callback will set `client_disconnected` to True upon
+        disconnection.
 
         """
         if isinstance(address_or_ble_device, BLEDevice):
@@ -95,10 +113,25 @@ class Pynecil:
         )
 
     async def connect(self) -> None:
-        """Establish connection.
+        """Establish or re-establish a connection to the device.
 
-        Establishes a connection to the device, if not already connected, and closes
-        previously opened stale connections if an unexpected disconnect occurred.
+        This method ensures a connection to the device is established, handling both initial
+        connections and reconnections if an unexpected disconnection occurred. If the device
+        is not connected and there was a previous unexpected disconnect, it closes the stale
+        connection before attempting to reconnect.
+
+        Notes
+        -----
+        - If `self._client.is_connected` is `True`, the method returns without performing
+        any connection operations.
+        - If `self.client_disconnected` is `True`, indicating a previous unexpected
+        disconnection, the method first closes the stale connection by calling `disconnect()`
+        before attempting to establish a new connection.
+
+        Raises
+        ------
+        BleakError
+            If an error occurs during the connection attempt.
 
         """
         if not self._client.is_connected:
@@ -112,18 +145,25 @@ class Pynecil:
         self.client_disconnected = False
 
     async def get_device_info(self) -> DeviceInfoResponse:
-        """Get device info.
+        """Retrieve device information from the Pinecil V2 device.
+
+        This method fetches details such as `name`, `address`, `build`, `device_sn`,
+        and `device_id` of the connected Pinecil V2 device.
 
         Returns
         -------
         DeviceInfoResponse
-            Object containing `name`, `address`, `build`, `device_sn` and `device_id` of
-            the Pinecil V2 device connected.
+            An object containing the retrieved device information.
 
         Raises
         ------
         CommunicationError
             If an error occurred while connecting and retrieving data from device.
+
+        Notes
+        -----
+        If `self.device_info.is_synced` is `True`, it returns the cached `device_info`
+        without performing a new data fetch.
 
         """
         if self.device_info.is_synced:
@@ -141,13 +181,14 @@ class Pynecil:
         return self.device_info
 
     async def get_live_data(self) -> LiveDataResponse:
-        """Get live sensor data.
+        """Fetch live sensor data from the device.
 
         Returns
         -------
         LiveDataResponse
-            Object containing 14 values retrieved from the
+            An object containing 14 sensor values retrieved from the
             bulk live data characteristic.
+
 
         Raises
         ------
@@ -160,24 +201,29 @@ class Pynecil:
     async def get_settings(
         self, settings: list[CharSetting | int] | None = None
     ) -> SettingsDataResponse:
-        """Get settings data.
+        """Fetch settings data from the device.
 
         Parameters
         ----------
         settings : list[CharSetting  |  int] | None, optional
-            List of Settings identified by a `CharSetting` item or their ID that should
-            be retrieved from the device. Retrieves all Settings if ommited.
+            List of settings identified by a `CharSetting` item or their ID that should
+            be retrieved from the device. Retrieves all settings if ommited.
 
         Returns
         -------
-        dict[str, Any]
-            Dict with name (lowercase) and normalized values of the settings retrieved
-            from the device.
+        SettingsDataResponse
+            A dictionary containing lowercase names and normalized values of the settings
+            retrieved from the device.
 
         Raises
         ------
         CommunicationError
             If an error occurred while connecting and retrieving data from device.
+
+        Notes
+        -----
+        This method asynchronously reads data from the device for each specified setting,
+        filtering based on the provided `settings` list.
 
         """
         if settings is None:
@@ -200,12 +246,12 @@ class Pynecil:
         Parameters
         ----------
         characteristic : Characteristic
-            Characteristic to retrieve from device.
+            The characteristic to retrieve from the device.
 
         Returns
         -------
         Any
-            Value read from characteristic and parsed with the corresponding decoder.
+            The value read from the characteristic and parsed with the corresponding decoder.
 
         Raises
         ------
@@ -213,66 +259,101 @@ class Pynecil:
             If an error occurred while connecting and retrieving data from device.
 
         """
-        uuid, decode, *_ = CHAR_MAP[characteristic]
-        if not decode:
+        uuid, decode, *_ = CHAR_MAP.get(characteristic, (None, None))
+
+        if not (decode and uuid):
             return None
+
         try:
             await self.connect()
             result = await self._client.read_gatt_char(uuid)
             _LOGGER.debug("Read characteristic %s, result: %s", str(uuid), result)
         except (BleakError, TimeoutError) as e:
-            _LOGGER.debug("Get device characteristics exception: %s", e)
+            _LOGGER.debug("Failed to read characteristic %s: %s", str(uuid), e)
             raise CommunicationError from e
         return decode(result)
 
     async def write(self, setting: CharSetting, value: Any) -> None:
-        """Write characteristic."""
-        uuid, _, convert, validate = CHAR_MAP[setting]
+        """Write to the specified characteristic.
+
+        Parameters
+        ----------
+        setting : CharSetting
+            The characteristic to write to.
+        value : Any
+            The value to write to the characteristic.
+
+        Raises
+        ------
+        ValueError
+            If no conversion or validation functions are found for the specified `setting`.
+        CommunicationError
+            If an error occurs while connecting to or writing data to the device.
+
+        """
+        uuid, _, convert, validate = CHAR_MAP.get(setting, (None, None, None, None))
+
+        if not (convert and validate):
+            raise ValueError(
+                f"No conversion or validation functions found for {setting}"
+            )
+
         data = validate(convert(value))
         try:
             await self.connect()
             await self._client.write_gatt_char(uuid, encode_int(data))
+            _LOGGER.debug("Wrote characteristic %s with value: %s", str(uuid), value)
         except (BleakError, TimeoutError) as e:
-            _LOGGER.debug("Get device characteristics exception: %s", e)
+            _LOGGER.debug("Failed to write characteristic %s: %s", str(uuid), e)
             raise CommunicationError from e
 
 
 def decode_int(value: bytearray) -> int:
-    """Decode byte value to an integer.
+    """Decode byte-encoded integer value to an integer.
 
     Parameters
     ----------
     value : bytearray
-        The byte encoded integer value.
+        Byte-encoded integer value to decode.
 
     Returns
     -------
     int
-        Value as integer.
+        Decoded integer value.
+
+    Notes
+    -----
+    The byte order is little-endian, and the integer is treated as unsigned.
 
     """
     return int.from_bytes(value, byteorder="little", signed=False)
 
 
 def decode_str(value: bytearray) -> str:
-    """Decode byte encoded string.
+    """Decode byte-encoded string to a UTF-8 string.
 
     Parameters
     ----------
     value : bytearray
-        A byte encoded string.
+        Byte-encoded string to decode.
 
     Returns
     -------
     str
-        A decoded string value.
+        Decoded UTF-8 string.
+
+    Raises
+    ------
+    UnicodeDecodeError
+        If the byte sequence cannot be decoded as UTF-8.
 
     """
+
     return value.decode("utf-8")
 
 
 def decode_live_data(value: bytearray) -> LiveDataResponse:
-    """Parse bytearray from bulk live data.
+    """Parse bytearray from bulk live data into LiveDataResponse.
 
     Parameters
     ----------
@@ -282,7 +363,21 @@ def decode_live_data(value: bytearray) -> LiveDataResponse:
     Returns
     -------
     LiveDataResponse
-        All 14 values from bul live data decoded and normalized.
+        Object containing 14 decoded values:
+        - live_temp: int
+        - setpoint_temp: int
+        - dc_voltage: float (normalized)
+        - handle_temp: float (normalized)
+        - pwm_level: int
+        - power_src: PowerSource
+        - tip_resistance: float (normalized)
+        - uptime: float (normalized)
+        - movement_time: float (normalized)
+        - max_tip_temp_ability: int
+        - tip_voltage: float (normalized)
+        - hall_sensor: int
+        - operating_mode: OperatingMode
+        - estimated_power: float (normalized)
 
     """
     data = struct.unpack("14I", value)
@@ -315,14 +410,17 @@ def clip(a: int, a_min: int, a_max: int) -> int:
     a : int
         The value to clip
     a_min : int
-        The lower limit for the value
+        The lower bound for the value.
     a_max : int
-        The upper limit for the value
+        The upper bound for the value.
 
     Returns
     -------
     int
-        The value if it is between the limits or min/max if it exceeds one of them.
+        The clipped value:
+        - If `a` is less than `a_min`, return `a_min`.
+        - If `a` is greater than `a_max`, return `a_max`.
+        - Otherwise, return `a` itself.
 
     """
     a = min(a, a_max)
@@ -335,12 +433,13 @@ def encode_int(value: int) -> bytes:
     Parameters
     ----------
     value : int
-        An integer value.
+        An integer value to encode.
 
     Returns
     -------
     bytes
-        The byte encoded value as unsigned little-endian of 2 bytes length.
+        Byte representation of the integer value in unsigned little-endian format,
+        occupying 2 bytes.
 
     """
     return value.to_bytes(2, byteorder="little", signed=False)
@@ -355,17 +454,23 @@ def encode_lang_code(language_code: str | LanguageCode) -> int:
     Parameters
     ----------
     language_code : str | LanguageCode
-        The language code as a string or as member of `LanguageCode`
+        The language code as a string or as a member of LanguageCode enum.
 
     Returns
     -------
     int
-        The value of the `LanguageCode` member or
-        the hashed integer value of language_code.
+        The hashed integer value of language_code.
+
+    Notes
+    -----
+    If language_code is a member of LanguageCode enum, its integer value is returned directly.
+    Otherwise, language_code is hashed using SHA-1, and the resulting hash is converted to an integer
+    and returned.
 
     """
     if isinstance(language_code, LanguageCode):
         return int(language_code.value)
+
     return int(hashlib.sha1(language_code.encode("utf-8")).hexdigest(), 16) % 0xFFFF
 
 
@@ -375,13 +480,14 @@ def decode_lang_code(raw: bytearray) -> LanguageCode | int | None:
     Parameters
     ----------
     raw : bytearray
-        A byte encoded integer value.
+        A byte-encoded integer value representing the hashed language code.
 
     Returns
     -------
     LanguageCode | int | None
-        The `LanguageCode` corresponding to the hashed interger value or the integer
-        if could not be matched to a known language codes.
+        The LanguageCode enum member corresponding to the hashed integer value,
+        or the integer value itself if it couldn't be matched to a known LanguageCode.
+        Returns None if decoding fails.
 
     """
     try:
