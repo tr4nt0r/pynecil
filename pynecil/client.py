@@ -267,7 +267,9 @@ class Pynecil:
         try:
             await self.connect()
             result = await self._client.read_gatt_char(uuid)
-            _LOGGER.debug("Read characteristic %s, result: %s", str(uuid), result)
+            _LOGGER.debug(
+                "Read characteristic %s, result: %s", str(uuid), decode(result)
+            )
         except (BleakError, TimeoutError) as e:
             _LOGGER.debug("Failed to read characteristic %s: %s", str(uuid), e)
             raise CommunicationError from e
