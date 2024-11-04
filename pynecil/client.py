@@ -106,6 +106,7 @@ class Pynecil:
         def _disconnected_callback(client: BleakClient) -> None:
             _LOGGER.debug("Disconnected from %s", client.address)
             self.client_disconnected = True
+            self.device_info.is_synced = False
 
         self._client = BleakClient(
             address_or_ble_device,
