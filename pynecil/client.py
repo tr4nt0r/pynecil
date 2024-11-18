@@ -113,6 +113,18 @@ class Pynecil:
             disconnected_callback=disconnected_callback or _disconnected_callback,
         )
 
+    @property
+    def is_connected(self) -> bool:
+        """Check if the client is connected.
+
+        Returns
+        -------
+        bool
+            `True` if the client is connected, `False` otherwise.
+
+        """
+        return self._client.is_connected
+
     async def connect(self) -> None:
         """Establish or re-establish a connection to the device.
 
