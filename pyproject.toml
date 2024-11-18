@@ -60,9 +60,9 @@ authors = [
 description = "Python library to communicate with Pinecil V2 soldering irons via Bluetooth"
 readme = "README.md"
 dynamic = ["version"]
+license = "MIT"
 classifiers = [
     "Programming Language :: Python :: 3 :: Only",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent"
 ]
 requires-python = ">=3.11"
