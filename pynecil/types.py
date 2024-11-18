@@ -235,10 +235,10 @@ class SettingsDataResponse(TypedDict, total=False):
     sleep_timeout: int | None
         timeout till sleep mode (in minutes , 0-15)
     min_dc_voltage_cells: int | None
-        Voltage to cut out at for under voltage when powered by DC jack (0-4)
-    min_volltage_per_cell: int | None
+        Voltage to cut out at for under voltage when powered by DC jack (0=DC, 1=3S, 2=4S, 3=5S, 4=6S)
+    min_volltage_per_cell: float | None
         Minimum allowed voltage per cell (in V, 2.4-3.8, step=0.1)
-    qc_ideal_voltage: int | None
+    qc_ideal_voltage: float | None
         QC3.0 maximum voltage (9.0-22.0V, step=0.1)
     orientation_mode: int | None
         Screen orientation (0=right-handed, 1=left-handed, 2=Auto)
@@ -264,7 +264,7 @@ class SettingsDataResponse(TypedDict, total=False):
         Description scroll speed (0=slow, 1=fast)
     locking_mode: int | None
         Allow locking buttons (0=off, 1=boost mode only, 2=full locking)
-    keep_awake_pulse_power: int | None
+    keep_awake_pulse_power: float | None
         Intensity of power of keep-awake-pulse in W (0-9.9)
     keep_awake_pulse_delay: int | None
         Delay before keep-awake-pulse is triggered (1-9 x 2.5s)
@@ -276,14 +276,14 @@ class SettingsDataResponse(TypedDict, total=False):
         Boost mode set point temperature (in °C, 0-450)
     calibration_offset: int | None
         Calibration offset for the installed tip (in µV, 100-2500)
-    power_limit: int | None
+    power_limit: float | None
         Maximum power allowed to output (in W, 0-12W, step=0.1)
     invert_buttons: int | None
         Change the plus and minus button assigment (0=off, 1=invert)
     temp_increment_long: int | None
-        Temperature-change-increment on long button press in seconds (5-90)
+        Temperature-change-increment on long button press in degree (5-90)
     temp_increment_short: int | None
-        Temperature-change-increment on short button press in seconds (1-50)
+        Temperature-change-increment on short button press in degree (1-50)
     hall_sensitivity: int | None
         Hall effect sensor sensitivity (0-9)
     accel_warn_counter: int | None
@@ -292,7 +292,7 @@ class SettingsDataResponse(TypedDict, total=False):
         Warning counter when PD interface could not be detected (0-9)
     ui_language: LanguageCode | None
         Hashed integer of language code
-    pd_negotiation_timeout: int | None
+    pd_negotiation_timeout: float | None
         Power delivery negotiation timeout in seconds (0-5.0, step=0.1)
     display_invert: int | None
         Invert colors of display (0=off, 1=on)
@@ -317,8 +317,8 @@ class SettingsDataResponse(TypedDict, total=False):
     sleep_temp: int | None
     sleep_timeout: int | None
     min_dc_voltage_cells: int | None
-    min_volltage_per_cell: int | None
-    qc_ideal_voltage: int | None
+    min_volltage_per_cell: float | None
+    qc_ideal_voltage: float | None
     orientation_mode: int | None
     accel_sensitivity: int | None
     animation_loop: int | None
@@ -331,13 +331,13 @@ class SettingsDataResponse(TypedDict, total=False):
     temp_unit: int | None
     desc_scroll_speed: int | None
     locking_mode: int | None
-    keep_awake_pulse_power: int | None
+    keep_awake_pulse_power: float | None
     keep_awake_pulse_delay: int | None
     keep_awake_pulse_duration: int | None
     voltage_div: int | None
     boost_temp: int | None
     calibration_offset: int | None
-    power_limit: int | None
+    power_limit: float | None
     invert_buttons: int | None
     temp_increment_long: int | None
     temp_increment_short: int | None
@@ -345,7 +345,7 @@ class SettingsDataResponse(TypedDict, total=False):
     accel_warn_counter: int | None
     pd_warn_counter: int | None
     ui_language: LanguageCode | None
-    pd_negotiation_timeout: int | None
+    pd_negotiation_timeout: float | None
     display_invert: int | None
     display_brightness: int | None
     logo_duration: int | None
