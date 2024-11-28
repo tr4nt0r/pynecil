@@ -587,8 +587,8 @@ CHAR_MAP: dict[Characteristic, tuple] = {
         int,
         lambda x: clip(x, 0, 4),
     ),
-    CharSetting.MIN_VOLLTAGE_PER_CELL: (
-        const.CHAR_UUID_SETTINGS_MIN_VOLLTAGE_PER_CELL,
+    CharSetting.MIN_VOLTAGE_PER_CELL: (
+        const.CHAR_UUID_SETTINGS_MIN_VOLTAGE_PER_CELL,
         lambda x: decode_int(x) / 10,
         lambda x: int(x * 10),
         lambda x: clip(x, 24, 38),
