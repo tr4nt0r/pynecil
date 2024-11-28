@@ -1,6 +1,6 @@
 """Pynecil - Python library to communicate with Pinecil V2 soldering irons via Bluetooth."""
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 
 from .client import Pynecil, discover
 from .exceptions import CommunicationError
