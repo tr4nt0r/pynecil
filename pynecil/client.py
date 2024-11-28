@@ -29,7 +29,7 @@ from .types import (
 if TYPE_CHECKING:
     from collections.abc import Callable
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger(__package__)
 
 
 async def discover(timeout: float = 10) -> BLEDevice | None:
