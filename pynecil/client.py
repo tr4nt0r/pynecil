@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import logging
 import struct
@@ -241,8 +242,8 @@ class Pynecil:
         """
         if settings is None:
             settings = []
-        result = {
-            characteristic.name.lower(): await self.read(characteristic)
+        tasks = [
+            (characteristic.name.lower(), self.read(characteristic))
             for characteristic in CHAR_MAP
             if isinstance(characteristic, CharSetting)
             and (
@@ -250,8 +251,13 @@ class Pynecil:
                 or characteristic in settings
                 or characteristic.value in settings
             )
-        }
-        return cast(SettingsDataResponse, result)
+        ]
+        results = await asyncio.gather(*(task[1] for task in tasks))
+
+        return cast(
+            SettingsDataResponse,
+            {key: value for (key, _), value in zip(tasks, results)},
+        )
 
     async def read(self, characteristic: Characteristic) -> Any:
         """Read specified characteristic and decode the result.
