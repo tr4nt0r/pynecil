@@ -35,7 +35,7 @@ class CharSetting(Characteristic, Enum):
     SLEEP_TEMP = 1
     SLEEP_TIMEOUT = 2
     MIN_DC_VOLTAGE_CELLS = 3
-    MIN_VOLLTAGE_PER_CELL = 4
+    MIN_VOLTAGE_PER_CELL = 4
     QC_IDEAL_VOLTAGE = 5
     ORIENTATION_MODE = 6
     ACCEL_SENSITIVITY = 7
@@ -236,7 +236,7 @@ class SettingsDataResponse(TypedDict, total=False):
         timeout till sleep mode (in minutes , 0-15)
     min_dc_voltage_cells: int | None
         Voltage to cut out at for under voltage when powered by DC jack (0=DC, 1=3S, 2=4S, 3=5S, 4=6S)
-    min_volltage_per_cell: float | None
+    min_voltage_per_cell: float | None
         Minimum allowed voltage per cell (in V, 2.4-3.8, step=0.1)
     qc_ideal_voltage: float | None
         QC3.0 maximum voltage (9.0-22.0V, step=0.1)
@@ -317,7 +317,7 @@ class SettingsDataResponse(TypedDict, total=False):
     sleep_temp: int | None
     sleep_timeout: int | None
     min_dc_voltage_cells: int | None
-    min_volltage_per_cell: float | None
+    min_voltage_per_cell: float | None
     qc_ideal_voltage: float | None
     orientation_mode: int | None
     accel_sensitivity: int | None
