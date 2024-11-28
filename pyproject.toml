@@ -23,13 +23,13 @@ path = "pynecil/__init__.py"
 python = "3.12"
 installer = "uv"
 dependencies = [
-    "mypy==1.8.0",
-    "ruff==0.4.8",
-    "pytest==8.2.2",
-    "pytest-cov==5.0.0",
-    "mkdocs-material==9.5.26",
-    "mkdocstrings[python]==0.25.1",
-    "pytest-asyncio==0.23.7",
+    "mypy==1.13.0",
+    "ruff==0.8.0",
+    "pytest==8.3.3",
+    "pytest-cov==6.0.0",
+    "mkdocs-material==9.5.46",
+    "mkdocstrings[python]==0.27.0",
+    "pytest-asyncio==0.24.0",
 ]
 
 [tool.hatch.envs.default.scripts]
