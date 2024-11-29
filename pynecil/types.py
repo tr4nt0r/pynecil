@@ -196,8 +196,8 @@ class LiveDataResponse:
         Last movement time (in seconds)
     max_tip_temp_ability: int | None
         Maximum temperature supported by the tip (in °C)
-    tip_voltage: float | None
-        Raw tip voltage (in mV)
+    tip_voltage: int | None
+        Raw tip voltage (in μV)
     hall_sensor: int | None
         Hall effect strength (if hall sensor is installed)
     operating_mode: OperatingMode | None
@@ -217,7 +217,7 @@ class LiveDataResponse:
     uptime: float | None = None
     movement_time: float | None = None
     max_tip_temp_ability: int | None = None
-    tip_voltage: float | None = None
+    tip_voltage: int | None = None
     hall_sensor: int | None = None
     operating_mode: OperatingMode | None = None
     estimated_power: float | None = None
