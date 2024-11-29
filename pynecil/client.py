@@ -561,7 +561,7 @@ CHAR_MAP: dict[Characteristic, tuple] = {
     ),
     CharLive.TIP_VOLTAGE: (
         const.CHAR_UUID_LIVE_TIP_VOLTAGE,
-        lambda x: decode_int(x) / 1000,  # convert to mVolt
+        decode_int,
     ),
     CharLive.HALL_SENSOR: (const.CHAR_UUID_LIVE_HALL_SENSOR, decode_int),
     CharLive.OPERATING_MODE: (
