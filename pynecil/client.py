@@ -395,7 +395,7 @@ def decode_live_data(value: bytearray) -> LiveDataResponse:
         - uptime: float (normalized)
         - movement_time: float (normalized)
         - max_tip_temp_ability: int
-        - tip_voltage: float (normalized)
+        - tip_voltage: int
         - hall_sensor: int
         - operating_mode: OperatingMode
         - estimated_power: float (normalized)
@@ -413,7 +413,7 @@ def decode_live_data(value: bytearray) -> LiveDataResponse:
         data[7] / 10,
         data[8] / 10,
         data[9],
-        data[10] / 1000,
+        data[10],
         data[11],
         OperatingMode(data[12]),
         data[13] / 10,
