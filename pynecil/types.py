@@ -196,7 +196,6 @@ class ScrollSpeed(Enum):
 class LockingMode(Enum):
     """Locking mode."""
 
-    #  (0=off, 1=boost mode only, 2=full locking)
     OFF = 0
     BOOST_ONLY = 1
     FULL_LOCKING = 2
@@ -401,7 +400,7 @@ class SettingsDataResponse(TypedDict, total=False):
     solder_screen_details: int | None
     temp_unit: TempUnit | None
     desc_scroll_speed: ScrollSpeed | None
-    locking_mode: int | None
+    locking_mode: LockingMode | None
     keep_awake_pulse_power: float | None
     keep_awake_pulse_delay: int | None
     keep_awake_pulse_duration: int | None
