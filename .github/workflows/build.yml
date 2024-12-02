@@ -82,5 +82,8 @@ jobs:
       with:
         draft: true
         body: ${{ github.event.head_commit.message }}
+        allowUpdates: true
+        omitBodyDuringUpdate: true
+        updateOnlyUnreleased: true
         artifacts: dist/*.whl,dist/*.tar.gz
         token: ${{ secrets.GITHUB_TOKEN }}
