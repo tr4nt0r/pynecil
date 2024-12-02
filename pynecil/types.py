@@ -143,6 +143,77 @@ class LanguageCode(Enum):
     ZH_TW = 34289
 
 
+class BatteryType(Enum):
+    """Battery type (cell count)."""
+
+    NO_BATTERY = 0  # DC power supply
+    BATTERY_3S = 1
+    BATTERY_4S = 2
+    BATTERY_5S = 3
+    BATTERY_6S = 4
+
+
+class ScreenOrientationMode(Enum):
+    """Screen orientation mode."""
+
+    RIGHT_HANDED = 0
+    LEFT_HANDED = 1
+    AUTO = 2
+
+
+class AnimationSpeed(Enum):
+    """Animation speed."""
+
+    OFF = 0
+    SLOW = 1
+    MEDIUM = 2
+    FAST = 3
+
+
+class AutostartMode(Enum):
+    """Autostart mode."""
+
+    DISABLED = 0
+    SOLDERING = 1
+    SLEEPING = 2
+    IDLE = 3
+
+
+class TempUnit(Enum):
+    """Temperature unit."""
+
+    CELSIUS = 0
+    FAHRENHEIT = 1
+
+
+class ScrollSpeed(Enum):
+    """Description scroll speed."""
+
+    SLOW = 0
+    FAST = 1
+
+
+class LockingMode(Enum):
+    """Locking mode."""
+
+    #  (0=off, 1=boost mode only, 2=full locking)
+    OFF = 0
+    BOOST_ONLY = 1
+    FULL_LOCKING = 2
+
+
+class LogoDuration(Enum):
+    """Logo duration."""
+
+    OFF = 0
+    SECONDS_1 = 1
+    SECONDS_2 = 2
+    SECONDS_3 = 3
+    SECONDS_4 = 4
+    SECONDS_5 = 5
+    LOOP = 6
+
+
 @dataclass
 class DeviceInfoResponse:
     """Response data with information about the Pinecil device.
@@ -234,22 +305,22 @@ class SettingsDataResponse(TypedDict, total=False):
         Temperature to drop to in sleep mode (in °C, 10-450)
     sleep_timeout: int | None
         timeout till sleep mode (in minutes , 0-15)
-    min_dc_voltage_cells: int | None
+    min_dc_voltage_cells: BatteryType | None
         Voltage to cut out at for under voltage when powered by DC jack (0=DC, 1=3S, 2=4S, 3=5S, 4=6S)
     min_voltage_per_cell: float | None
         Minimum allowed voltage per cell (in V, 2.4-3.8, step=0.1)
     qc_ideal_voltage: float | None
         QC3.0 maximum voltage (9.0-22.0V, step=0.1)
-    orientation_mode: int | None
-        Screen orientation (0=right-handed, 1=left-handed, 2=Auto)
+    orientation_mode: ScreenOrientationMode | None
+        Screen orientation (right-handed, left-handed, Auto)
     accel_sensitivity: int | None
         Motion sensitivity (0-9)
     animation_loop: int | None
         Animation loop switch (0=off, 1=on)
-    animation_speed: int | None
-        Animation speed (0=off, 1=slow, 2=medium, 3=fast)
-    autostart_mode: int | None
-        Mode to enter on start-up (0=disabled, 1=soldering, 2=sleeping, 3=no heat)
+    animation_speed: AnimationSpeed | None
+        Animation speed (off, slow, medium, fast)
+    autostart_mode: AutostartMode | None
+        Mode to enter on start-up (disabled, soldering, sleeping, idle)
     shutdown_time: int | None
         Time until unit shuts down if not moved (in seconds, 0-60)
     cooling_temp_blink: int | None
@@ -258,12 +329,12 @@ class SettingsDataResponse(TypedDict, total=False):
         Show details on idle screen (0=off, 1=on)
     solder_screen_details: int | None
         Show details on soldering screen (0=off, 1=on)
-    temp_unit: int | None
+    temp_unit: TempUnit | None
         Temperature unit (0=Celsius, 1=Fahrenheit)
-    desc_scroll_speed: int | None
+    desc_scroll_speed: ScrollSpeed | None
         Description scroll speed (0=slow, 1=fast)
-    locking_mode: int | None
-        Allow locking buttons (0=off, 1=boost mode only, 2=full locking)
+    locking_mode: LockingMode | None
+        Allow locking buttons (off, boost mode only, full locking)
     keep_awake_pulse_power: float | None
         Intensity of power of keep-awake-pulse in W (0-9.9)
     keep_awake_pulse_delay: int | None
@@ -298,8 +369,8 @@ class SettingsDataResponse(TypedDict, total=False):
         Invert colors of display (0=off, 1=on)
     display_brightness: int | None
         Display brightness (1-5)
-    logo_duration: int | None
-        Boot logo duration (0=off, 1-5=seconds, 6=loop ∞)
+    logo_duration: LogoDuration | None
+        Boot logo duration (off, 1-5seconds, loop ∞)
     calibrate_cjc: int | None
         Enable CJC calibration at next boot
     ble_enabled: int | None
@@ -316,20 +387,20 @@ class SettingsDataResponse(TypedDict, total=False):
     setpoint_temp: int | None
     sleep_temp: int | None
     sleep_timeout: int | None
-    min_dc_voltage_cells: int | None
+    min_dc_voltage_cells: BatteryType | None
     min_voltage_per_cell: float | None
     qc_ideal_voltage: float | None
-    orientation_mode: int | None
+    orientation_mode: ScreenOrientationMode | None
     accel_sensitivity: int | None
     animation_loop: int | None
-    animation_speed: int | None
-    autostart_mode: int | None
+    animation_speed: AnimationSpeed | None
+    autostart_mode: AutostartMode | None
     shutdown_time: int | None
     cooling_temp_blink: int | None
     idle_screen_details: int | None
     solder_screen_details: int | None
-    temp_unit: int | None
-    desc_scroll_speed: int | None
+    temp_unit: TempUnit | None
+    desc_scroll_speed: ScrollSpeed | None
     locking_mode: int | None
     keep_awake_pulse_power: float | None
     keep_awake_pulse_delay: int | None
@@ -348,7 +419,7 @@ class SettingsDataResponse(TypedDict, total=False):
     pd_negotiation_timeout: float | None
     display_invert: int | None
     display_brightness: int | None
-    logo_duration: int | None
+    logo_duration: LogoDuration | None
     calibrate_cjc: int | None
     ble_enabled: int | None
     usb_pd_mode: int | None

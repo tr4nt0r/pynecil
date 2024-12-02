@@ -15,6 +15,9 @@ from bleak.exc import BleakError
 from . import const
 from .exceptions import CommunicationError
 from .types import (
+    AnimationSpeed,
+    AutostartMode,
+    BatteryType,
     Characteristic,
     CharBulk,
     CharLive,
@@ -22,9 +25,14 @@ from .types import (
     DeviceInfoResponse,
     LanguageCode,
     LiveDataResponse,
+    LockingMode,
+    LogoDuration,
     OperatingMode,
     PowerSource,
+    ScreenOrientationMode,
+    ScrollSpeed,
     SettingsDataResponse,
+    TempUnit,
 )
 
 if TYPE_CHECKING:
@@ -589,8 +597,8 @@ CHAR_MAP: dict[Characteristic, tuple] = {
     ),
     CharSetting.MIN_DC_VOLTAGE_CELLS: (
         const.CHAR_UUID_SETTINGS_MIN_DC_VOLTAGE_CELLS,
-        decode_int,
-        int,
+        lambda x: BatteryType(decode_int(x)),
+        lambda x: x.value if isinstance(x, BatteryType) else int(x),
         lambda x: clip(x, 0, 4),
     ),
     CharSetting.MIN_VOLTAGE_PER_CELL: (
@@ -607,8 +615,8 @@ CHAR_MAP: dict[Characteristic, tuple] = {
     ),
     CharSetting.ORIENTATION_MODE: (
         const.CHAR_UUID_SETTINGS_ORIENTATION_MODE,
-        decode_int,
-        int,
+        lambda x: ScreenOrientationMode(decode_int(x)),
+        lambda x: x.value if isinstance(x, ScreenOrientationMode) else int(x),
         lambda x: clip(x, 0, 2),
     ),
     CharSetting.ACCEL_SENSITIVITY: (
@@ -625,14 +633,14 @@ CHAR_MAP: dict[Characteristic, tuple] = {
     ),
     CharSetting.ANIMATION_SPEED: (
         const.CHAR_UUID_SETTINGS_ANIMATION_SPEED,
-        decode_int,
-        int,
+        lambda x: AnimationSpeed(decode_int(x)),
+        lambda x: x.value if isinstance(x, AnimationSpeed) else int(x),
         lambda x: clip(x, 0, 3),
     ),
     CharSetting.AUTOSTART_MODE: (
         const.CHAR_UUID_SETTINGS_AUTOSTART_MODE,
-        decode_int,
-        int,
+        lambda x: AutostartMode(decode_int(x)),
+        lambda x: x.value if isinstance(x, AutostartMode) else int(x),
         lambda x: clip(x, 0, 3),
     ),
     CharSetting.SHUTDOWN_TIME: (
@@ -661,20 +669,20 @@ CHAR_MAP: dict[Characteristic, tuple] = {
     ),
     CharSetting.TEMP_UNIT: (
         const.CHAR_UUID_SETTINGS_TEMP_UNIT,
-        decode_int,
-        int,
+        lambda x: TempUnit(decode_int(x)),
+        lambda x: x.value if isinstance(x, TempUnit) else int(x),
         lambda x: clip(x, 0, 1),
     ),
     CharSetting.DESC_SCROLL_SPEED: (
         const.CHAR_UUID_SETTINGS_DESC_SCROLL_SPEED,
-        decode_int,
-        int,
+        lambda x: ScrollSpeed(decode_int(x)),
+        lambda x: x.value if isinstance(x, ScrollSpeed) else int(x),
         lambda x: clip(x, 0, 1),
     ),
     CharSetting.LOCKING_MODE: (
         const.CHAR_UUID_SETTINGS_LOCKING_MODE,
-        decode_int,
-        int,
+        lambda x: LockingMode(decode_int(x)),
+        lambda x: x.value if isinstance(x, LockingMode) else int(x),
         lambda x: clip(x, 0, 2),
     ),
     CharSetting.KEEP_AWAKE_PULSE_POWER: (
@@ -781,8 +789,8 @@ CHAR_MAP: dict[Characteristic, tuple] = {
     ),
     CharSetting.LOGO_DURATION: (
         const.CHAR_UUID_SETTINGS_LOGO_DURATION,
-        decode_int,
-        int,
+        lambda x: LogoDuration(decode_int(x)),
+        lambda x: x.value if isinstance(x, LockingMode) else int(x),
         lambda x: clip(x, 0, 6),
     ),
     CharSetting.CALIBRATE_CJC: (
