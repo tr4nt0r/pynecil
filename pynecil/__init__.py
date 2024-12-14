@@ -1,9 +1,8 @@
 """Pynecil - Python library to communicate with Pinecil V2 soldering irons via Bluetooth."""
 
 __version__ = "2.0.2"
-
 from .client import Pynecil, discover
-from .exceptions import CommunicationError
+from .exceptions import CommunicationError, UpdateException
 from .types import (
     AnimationSpeed,
     AutostartMode,
@@ -23,6 +22,7 @@ from .types import (
     SettingsDataResponse,
     TempUnit,
 )
+from .update import IronOSUpdate, LatestRelease
 
 __all__ = [
     "AnimationSpeed",
@@ -34,7 +34,9 @@ __all__ = [
     "CommunicationError",
     "DeviceInfoResponse",
     "discover",
+    "IronOSUpdate",
     "LanguageCode",
+    "LatestRelease",
     "LiveDataResponse",
     "LockingMode",
     "LogoDuration",
@@ -45,4 +47,5 @@ __all__ = [
     "ScrollSpeed",
     "SettingsDataResponse",
     "TempUnit",
+    "UpdateException",
 ]

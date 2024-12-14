@@ -27,3 +27,7 @@ class CommunicationError(Exception):
 
         """
         return f"{self.__class__.__name__}: {self.message}"
+
+
+class UpdateException(Exception):
+    """Exception raised for errors fetching latest release from github."""
