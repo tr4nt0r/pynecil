@@ -627,9 +627,9 @@ CHAR_MAP: dict[Characteristic, tuple] = {
     ),
     CharSetting.ANIMATION_LOOP: (
         const.CHAR_UUID_SETTINGS_ANIMATION_LOOP,
-        decode_int,
+        lambda x: bool(decode_int(x)),
+        bool,
         int,
-        lambda x: clip(x, 0, 1),
     ),
     CharSetting.ANIMATION_SPEED: (
         const.CHAR_UUID_SETTINGS_ANIMATION_SPEED,
@@ -651,21 +651,21 @@ CHAR_MAP: dict[Characteristic, tuple] = {
     ),
     CharSetting.COOLING_TEMP_BLINK: (
         const.CHAR_UUID_SETTINGS_COOLING_TEMP_BLINK,
-        decode_int,
+        lambda x: bool(decode_int(x)),
+        bool,
         int,
-        lambda x: clip(x, 0, 1),
     ),
     CharSetting.IDLE_SCREEN_DETAILS: (
         const.CHAR_UUID_SETTINGS_IDLE_SCREEN_DETAILS,
-        decode_int,
+        lambda x: bool(decode_int(x)),
+        bool,
         int,
-        lambda x: clip(x, 0, 1),
     ),
     CharSetting.SOLDER_SCREEN_DETAILS: (
         const.CHAR_UUID_SETTINGS_SOLDER_SCREEN_DETAILS,
-        decode_int,
+        lambda x: bool(decode_int(x)),
+        bool,
         int,
-        lambda x: clip(x, 0, 1),
     ),
     CharSetting.TEMP_UNIT: (
         const.CHAR_UUID_SETTINGS_TEMP_UNIT,
@@ -729,9 +729,9 @@ CHAR_MAP: dict[Characteristic, tuple] = {
     ),
     CharSetting.INVERT_BUTTONS: (
         const.CHAR_UUID_SETTINGS_INVERT_BUTTONS,
-        decode_int,
+        lambda x: bool(decode_int(x)),
+        bool,
         int,
-        lambda x: clip(x, 0, 1),
     ),
     CharSetting.TEMP_INCREMENT_LONG: (
         const.CHAR_UUID_SETTINGS_TEMP_INCREMENT_LONG,
@@ -777,9 +777,9 @@ CHAR_MAP: dict[Characteristic, tuple] = {
     ),
     CharSetting.DISPLAY_INVERT: (
         const.CHAR_UUID_SETTINGS_DISPLAY_INVERT,
-        decode_int,
+        lambda x: bool(decode_int(x)),
+        bool,
         int,
-        lambda x: clip(x, 0, 1),
     ),
     CharSetting.DISPLAY_BRIGHTNESS: (
         const.CHAR_UUID_SETTINGS_DISPLAY_BRIGHTNESS,
@@ -795,32 +795,32 @@ CHAR_MAP: dict[Characteristic, tuple] = {
     ),
     CharSetting.CALIBRATE_CJC: (
         const.CHAR_UUID_SETTINGS_CALIBRATE_CJC,
-        decode_int,
+        lambda x: bool(decode_int(x)),
+        bool,
         int,
-        lambda x: clip(x, 0, 1),
     ),
     CharSetting.BLE_ENABLED: (
         const.CHAR_UUID_SETTINGS_BLE_ENABLED,
-        decode_int,
+        lambda _: True,
+        bool,
         int,
-        lambda _: 0,
     ),
     CharSetting.USB_PD_MODE: (
         const.CHAR_UUID_SETTINGS_USB_PD_MODE,
-        decode_int,
+        lambda x: bool(decode_int(x)),
+        bool,
         int,
-        lambda x: clip(x, 0, 1),
     ),
     CharSetting.SETTINGS_SAVE: (
         const.CHAR_UUID_SETTINGS_SAVE,
-        decode_int,
+        lambda x: bool(decode_int(x)),
+        bool,
         int,
-        lambda _: 1,
     ),
     CharSetting.SETTINGS_RESET: (
         const.CHAR_UUID_SETTINGS_RESET,
-        decode_int,
+        lambda x: bool(decode_int(x)),
+        bool,
         int,
-        lambda _: 1,
     ),
 }
