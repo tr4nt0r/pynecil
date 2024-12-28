@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, Any, cast
 
 from bleak import BleakClient, BleakScanner
 from bleak.backends.device import BLEDevice
-from bleak.exc import BleakError
+from bleak.exc import BleakCharacteristicNotFoundError, BleakError
 
 from . import const
 from .exceptions import CommunicationError
@@ -297,6 +297,10 @@ class Pynecil:
             _LOGGER.debug(
                 "Read characteristic %s, result: %s", str(uuid), decode(result)
             )
+        except BleakCharacteristicNotFoundError as e:
+            if clear_cache := getattr(self._client, "clear_cache"):
+                await clear_cache()
+            raise CommunicationError from e
         except (BleakError, TimeoutError) as e:
             _LOGGER.debug("Failed to read characteristic %s: %s", str(uuid), e)
             raise CommunicationError from e
@@ -801,7 +805,7 @@ CHAR_MAP: dict[Characteristic, tuple] = {
     ),
     CharSetting.BLE_ENABLED: (
         const.CHAR_UUID_SETTINGS_BLE_ENABLED,
-        lambda _: True,
+        lambda x: bool(decode_int(x)),
         bool,
         int,
     ),
