@@ -314,20 +314,20 @@ class SettingsDataResponse(TypedDict, total=False):
         Screen orientation (right-handed, left-handed, Auto)
     accel_sensitivity: int | None
         Motion sensitivity (0-9)
-    animation_loop: int | None
-        Animation loop switch (0=off, 1=on)
+    animation_loop: bool | None
+        Animation loop switch
     animation_speed: AnimationSpeed | None
         Animation speed (off, slow, medium, fast)
     autostart_mode: AutostartMode | None
         Mode to enter on start-up (disabled, soldering, sleeping, idle)
     shutdown_time: int | None
         Time until unit shuts down if not moved (in seconds, 0-60)
-    cooling_temp_blink: int | None
-        Blink temperature on the cool down screen until its <50C (0=off, 1=on)
-    idle_screen_details: int | None
-        Show details on idle screen (0=off, 1=on)
-    solder_screen_details: int | None
-        Show details on soldering screen (0=off, 1=on)
+    cooling_temp_blink: bool | None
+        Blink temperature on the cool down screen until its <50C
+    idle_screen_details: bool | None
+        Show details on idle screen
+    solder_screen_details: bool | None
+        Show details on soldering screen
     temp_unit: TempUnit | None
         Temperature unit (0=Celsius, 1=Fahrenheit)
     desc_scroll_speed: ScrollSpeed | None
@@ -348,8 +348,8 @@ class SettingsDataResponse(TypedDict, total=False):
         Calibration offset for the installed tip (in µV, 100-2500)
     power_limit: float | None
         Maximum power allowed to output (in W, 0-12W, step=0.1)
-    invert_buttons: int | None
-        Change the plus and minus button assigment (0=off, 1=invert)
+    invert_buttons: bool | None
+        Change the plus and minus button assigment
     temp_increment_long: int | None
         Temperature-change-increment on long button press in degree (5-90)
     temp_increment_short: int | None
@@ -364,21 +364,21 @@ class SettingsDataResponse(TypedDict, total=False):
         Hashed integer of language code
     pd_negotiation_timeout: float | None
         Power delivery negotiation timeout in seconds (0-5.0, step=0.1)
-    display_invert: int | None
-        Invert colors of display (0=off, 1=on)
+    display_invert: bool | None
+        Invert colors of display
     display_brightness: int | None
         Display brightness (1-5)
     logo_duration: LogoDuration | None
         Boot logo duration (off, 1-5seconds, loop ∞)
-    calibrate_cjc: int | None
+    calibrate_cjc: bool | None
         Enable CJC calibration at next boot
-    ble_enabled: int | None
+    ble_enabled: bool | None
         Disable BLE
-    usb_pd_mode: int | None
-        PPS & EPR USB Power delivery mode (0=off, 1=on)
-    settings_save: int | None
+    usb_pd_mode: bool | None
+        PPS & EPR USB Power delivery mode
+    settings_save: bool | None
         Save settings to flash
-    settings_reset: int | None
+    settings_reset: bool | None
         Reset settings to default values
 
     """
@@ -391,13 +391,13 @@ class SettingsDataResponse(TypedDict, total=False):
     qc_ideal_voltage: float | None
     orientation_mode: ScreenOrientationMode | None
     accel_sensitivity: int | None
-    animation_loop: int | None
+    animation_loop: bool | None
     animation_speed: AnimationSpeed | None
     autostart_mode: AutostartMode | None
     shutdown_time: int | None
-    cooling_temp_blink: int | None
-    idle_screen_details: int | None
-    solder_screen_details: int | None
+    cooling_temp_blink: bool | None
+    idle_screen_details: bool | None
+    solder_screen_details: bool | None
     temp_unit: TempUnit | None
     desc_scroll_speed: ScrollSpeed | None
     locking_mode: LockingMode | None
@@ -408,7 +408,7 @@ class SettingsDataResponse(TypedDict, total=False):
     boost_temp: int | None
     calibration_offset: int | None
     power_limit: float | None
-    invert_buttons: int | None
+    invert_buttons: bool | None
     temp_increment_long: int | None
     temp_increment_short: int | None
     hall_sensitivity: int | None
@@ -416,11 +416,11 @@ class SettingsDataResponse(TypedDict, total=False):
     pd_warn_counter: int | None
     ui_language: LanguageCode | None
     pd_negotiation_timeout: float | None
-    display_invert: int | None
+    display_invert: bool | None
     display_brightness: int | None
     logo_duration: LogoDuration | None
-    calibrate_cjc: int | None
-    ble_enabled: int | None
-    usb_pd_mode: int | None
-    settings_save: int | None
-    settings_reset: int | None
+    calibrate_cjc: bool | None
+    ble_enabled: bool | None
+    usb_pd_mode: bool | None
+    settings_save: bool | None
+    settings_reset: bool | None
