@@ -790,7 +790,7 @@ CHAR_MAP: dict[Characteristic, tuple] = {
     CharSetting.LOGO_DURATION: (
         const.CHAR_UUID_SETTINGS_LOGO_DURATION,
         lambda x: LogoDuration(decode_int(x)),
-        lambda x: x.value if isinstance(x, LockingMode) else int(x),
+        lambda x: x.value if isinstance(x, LogoDuration) else int(x),
         lambda x: clip(x, 0, 6),
     ),
     CharSetting.CALIBRATE_CJC: (
@@ -801,7 +801,7 @@ CHAR_MAP: dict[Characteristic, tuple] = {
     ),
     CharSetting.BLE_ENABLED: (
         const.CHAR_UUID_SETTINGS_BLE_ENABLED,
-        lambda _: True,
+        lambda x: bool(decode_int(x)),
         bool,
         int,
     ),
