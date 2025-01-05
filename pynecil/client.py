@@ -6,6 +6,7 @@ import asyncio
 import hashlib
 import logging
 import struct
+from math import floor
 from typing import TYPE_CHECKING, Any, cast
 
 from bleak import BleakClient, BleakScanner
@@ -723,9 +724,9 @@ CHAR_MAP: dict[Characteristic, tuple] = {
     ),
     CharSetting.POWER_LIMIT: (
         const.CHAR_UUID_SETTINGS_POWER_LIMIT,
-        lambda x: decode_int(x) / 10,
-        lambda x: int(x * 10),
-        lambda x: clip(x, 0, 120),
+        lambda x: decode_int(x),
+        int,
+        lambda x: clip(floor(x / 5) * 5, 0, 120),
     ),
     CharSetting.INVERT_BUTTONS: (
         const.CHAR_UUID_SETTINGS_INVERT_BUTTONS,

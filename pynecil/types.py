@@ -346,8 +346,8 @@ class SettingsDataResponse(TypedDict, total=False):
         Boost mode set point temperature (in °C, 0-450)
     calibration_offset: int | None
         Calibration offset for the installed tip (in µV, 100-2500)
-    power_limit: float | None
-        Maximum power allowed to output (in W, 0-12W, step=0.1)
+    power_limit: int | None
+        Maximum power allowed to output (in W, 0-120W, step=5)
     invert_buttons: bool | None
         Change the plus and minus button assigment
     temp_increment_long: int | None
@@ -407,7 +407,7 @@ class SettingsDataResponse(TypedDict, total=False):
     voltage_div: int | None
     boost_temp: int | None
     calibration_offset: int | None
-    power_limit: float | None
+    power_limit: int | None
     invert_buttons: bool | None
     temp_increment_long: int | None
     temp_increment_short: int | None
