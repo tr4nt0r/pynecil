@@ -21,6 +21,7 @@ from .types import (
     ScrollSpeed,
     SettingsDataResponse,
     TempUnit,
+    USBPDMode,
 )
 from .update import IronOSUpdate, LatestRelease
 
@@ -48,4 +49,5 @@ __all__ = [
     "SettingsDataResponse",
     "TempUnit",
     "UpdateException",
+    "USBPDMode",
 ]
