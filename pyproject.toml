@@ -25,7 +25,7 @@ python = "3.12"
 installer = "uv"
 dependencies = [
     "mypy==1.13.0",
-    "ruff==0.8.0",
+    "ruff==0.8.6",
     "pytest==8.3.3",
     "pytest-cov==6.0.0",
     "mkdocs-material==9.5.46",
