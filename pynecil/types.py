@@ -102,6 +102,15 @@ class OperatingMode(Enum):
     SLEEPING = 3
     SETTINGS = 4
     DEBUG = 5
+    SOLDERING_PROFILE = 6
+    TEMPERATURE_ADJUST = 7
+    USB_PD_DEBUG = 8
+    THERMAL_RUNAWAY = 9
+    STARTUP_LOGO = 10
+    CJC_CALIBRATION = 11
+    STARTUP_WARNINGS = 12
+    INITIALISATION_DONE = 13
+    HIBERNATING = 14
 
 
 class LanguageCode(Enum):
@@ -211,6 +220,14 @@ class LogoDuration(Enum):
     SECONDS_4 = 4
     SECONDS_5 = 5
     LOOP = 6
+
+
+class USBPDMode(Enum):
+    """USB Power delivery mode."""
+
+    OFF = 0
+    ON = 1
+    SAFE = 2
 
 
 @dataclass
@@ -374,7 +391,7 @@ class SettingsDataResponse(TypedDict, total=False):
         Enable CJC calibration at next boot
     ble_enabled: bool | None
         Disable BLE
-    usb_pd_mode: bool | None
+    usb_pd_mode: USBPDMode | None
         PPS & EPR USB Power delivery mode
     settings_save: bool | None
         Save settings to flash
@@ -421,6 +438,6 @@ class SettingsDataResponse(TypedDict, total=False):
     logo_duration: LogoDuration | None
     calibrate_cjc: bool | None
     ble_enabled: bool | None
-    usb_pd_mode: bool | None
+    usb_pd_mode: USBPDMode | None
     settings_save: bool | None
     settings_reset: bool | None
