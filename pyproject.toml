@@ -16,6 +16,7 @@ allow-direct-references = true
 
 [tool.hatch.version]
 source = "regex_commit"
+tag_sign = false
 commit_extra_args = ["-e"]
 path = "pynecil/__init__.py"
 
