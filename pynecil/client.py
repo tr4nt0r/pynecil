@@ -34,6 +34,7 @@ from .types import (
     ScrollSpeed,
     SettingsDataResponse,
     TempUnit,
+    USBPDMode,
 )
 
 if TYPE_CHECKING:
@@ -808,9 +809,9 @@ CHAR_MAP: dict[Characteristic, tuple] = {
     ),
     CharSetting.USB_PD_MODE: (
         const.CHAR_UUID_SETTINGS_USB_PD_MODE,
-        lambda x: bool(decode_int(x)),
-        bool,
-        int,
+        lambda x: USBPDMode(decode_int(x)),
+        lambda x: x.value if isinstance(x, USBPDMode) else int(x),
+        lambda x: clip(x, 0, 2),
     ),
     CharSetting.SETTINGS_SAVE: (
         const.CHAR_UUID_SETTINGS_SAVE,
