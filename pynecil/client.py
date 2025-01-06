@@ -582,13 +582,13 @@ CHAR_MAP: dict[Characteristic, tuple] = {
         const.CHAR_UUID_SETTINGS_SETPOINT_TEMP,
         decode_int,
         int,
-        lambda x: clip(x, 10, 450),
+        lambda x: clip(x, 10, 850),
     ),
     CharSetting.SLEEP_TEMP: (
         const.CHAR_UUID_SETTINGS_SLEEP_TEMP,
         decode_int,
         int,
-        lambda x: clip(x, 10, 450),
+        lambda x: clip(x, 10, 850),
     ),
     CharSetting.SLEEP_TIMEOUT: (
         const.CHAR_UUID_SETTINGS_SLEEP_TIMEOUT,
@@ -714,7 +714,7 @@ CHAR_MAP: dict[Characteristic, tuple] = {
         const.CHAR_UUID_SETTINGS_BOOST_TEMP,
         decode_int,
         int,
-        lambda x: clip(x, 250, 450) if x != 0 else 0,
+        lambda x: clip(x, 250, 850) if x != 0 else 0,
     ),
     CharSetting.CALIBRATION_OFFSET: (
         const.CHAR_UUID_SETTINGS_CALIBRATION_OFFSET,
