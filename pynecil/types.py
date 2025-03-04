@@ -70,6 +70,8 @@ class CharSetting(Characteristic, Enum):
     CALIBRATE_CJC = 36
     BLE_ENABLED = 37
     USB_PD_MODE = 38
+    HALL_SLEEP_TIME = 39
+    TIP_TYPE = 40
     SETTINGS_RESET = 98
     SETTINGS_SAVE = 99
 
@@ -228,6 +230,15 @@ class USBPDMode(Enum):
     OFF = 0
     ON = 1
     SAFE = 2
+
+
+class TipType(Enum):
+    """Type of soldering tip."""
+
+    AUTO = 0
+    TS100_LONG = 1
+    PINE_SHORT = 2
+    PTS200 = 3
 
 
 @dataclass
@@ -439,5 +450,7 @@ class SettingsDataResponse(TypedDict, total=False):
     calibrate_cjc: bool | None
     ble_enabled: bool | None
     usb_pd_mode: USBPDMode | None
+    hall_sleep_time: int | None
+    tip_type: TipType | None
     settings_save: bool | None
     settings_reset: bool | None
