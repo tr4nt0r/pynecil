@@ -34,6 +34,7 @@ from .types import (
     ScrollSpeed,
     SettingsDataResponse,
     TempUnit,
+    TipType,
     USBPDMode,
 )
 
@@ -812,6 +813,20 @@ CHAR_MAP: dict[Characteristic, tuple] = {
         lambda x: USBPDMode(decode_int(x)),
         lambda x: x.value if isinstance(x, USBPDMode) else int(x),
         lambda x: clip(x, 0, 2),
+    ),
+    # added in 2.23
+    CharSetting.HALL_SLEEP_TIME: (
+        const.CHAR_UUID_SETTINGS_HALL_SLEEP_TIME,
+        lambda x,: decode_int(x) * 5,
+        lambda x: int(x / 5),
+        lambda x: clip(x, 0, 12),
+    ),
+    # added in 2.23
+    CharSetting.TIP_TYPE: (
+        const.CHAR_UUID_SETTINGS_TIP_TYPE,
+        lambda x: TipType(decode_int(x)),
+        lambda x: x.value if isinstance(x, TipType) else int(x),
+        lambda x: clip(x, 0, 3),
     ),
     CharSetting.SETTINGS_SAVE: (
         const.CHAR_UUID_SETTINGS_SAVE,
