@@ -70,8 +70,8 @@ class CharSetting(Characteristic, Enum):
     CALIBRATE_CJC = 36
     BLE_ENABLED = 37
     USB_PD_MODE = 38
-    HALL_SLEEP_TIME = 39
-    TIP_TYPE = 40
+    HALL_SLEEP_TIME = 53
+    TIP_TYPE = 54
     SETTINGS_RESET = 98
     SETTINGS_SAVE = 99
 
