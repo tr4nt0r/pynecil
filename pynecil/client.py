@@ -579,7 +579,10 @@ CHAR_MAP: dict[Characteristic, tuple] = {
         const.CHAR_UUID_LIVE_OPERATING_MODE,
         lambda x: OperatingMode(decode_int(x)),
     ),
-    CharLive.ESTIMATED_POWER: (const.CHAR_UUID_LIVE_ESTIMATED_POWER, decode_int),
+    CharLive.ESTIMATED_POWER: (
+        const.CHAR_UUID_LIVE_ESTIMATED_POWER,
+        lambda x: decode_int(x) / 10,
+    ),
     CharSetting.SETPOINT_TEMP: (
         const.CHAR_UUID_SETTINGS_SETPOINT_TEMP,
         decode_int,
