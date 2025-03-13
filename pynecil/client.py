@@ -570,6 +570,10 @@ CHAR_MAP: dict[Characteristic, tuple] = {
         const.CHAR_UUID_LIVE_MOVEMENT_TIME,
         lambda x: decode_int(x) / 10,
     ),
+    CharLive.MAX_TIP_TEMP_ABILITY: (
+        const.CHAR_UUID_LIVE_MAX_TIP_TEMP_ABILITY,
+        decode_int,
+    ),
     CharLive.TIP_VOLTAGE: (
         const.CHAR_UUID_LIVE_TIP_VOLTAGE,
         decode_int,
