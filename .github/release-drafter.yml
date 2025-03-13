@@ -3,97 +3,88 @@ tag-template: 'v$RESOLVED_VERSION'
 
 
 categories:
-  - title: '⚠️ Breaking changes'
+  - title: '💥 Breaking changes'
     labels:
-      - 'breaking'
-  - title: '🚀 Features'
+      - ':boom: breaking change'
+  - title: '🚀 New Features'
     labels:
-      - 'feature'
-      - 'enhancement'
-  - title: '🐛 Bug Fixes'
+      - ':rocket: feature'
+  - title: '👻 Bug Fixes'
     labels:
-      - 'bug'
-  - title: '⏳ Deprecations'
+      - ':ghost: bug'
+  - title: '🗄️ Deprecations'
     labels:
-      - 'deprecation'
+      - ':file_cabinet: deprecation'
   - title: '📃 Documentation'
     labels:
-      - 'documentation'
-  - title: '🧩 Dependency Updates'
-    labels:
-      - 'dependencies'
-      - 'github_actions'
-    collapse-after: 5
+      - ':book: documentation'
   - title: '🧰 Maintenance'
     labels:
-      - 'perfomance'
-      - 'refactor'
-      - 'ci'
-      - 'build'
+      - ':building_construction: build'
+      - ':construction_worker_woman: ci'
+      - ':clapper: github_actions'
+    collapse-after: 5
   - title: '🔬 Other updates'
     labels:
-      - 'style'
-      - 'testing'
+      - ':nail_care: style'
+      - ':test_tube: testing'
+      - ':racing_car: performance'
+      - ':sparkles: code quality'
+      - ':sparkles: enhancement'
+  - title: '🧩 Dependency Updates'
+    labels:
+      - ':recycle: dependencies'
+    collapse-after: 5
+exclude-labels:
+  - ':arrow_up: bump'
 
 autolabeler:
-  - label: 'feature'
+  - label: ':rocket: feature'
     title:
       - '/adds/i'
       - '/add method/i'
-  - label: 'bug'
+  - label: ':ghost: bug'
     title:
       - '/fix/i'
-  - label: 'code quality'
+  - label: ':sparkles: code quality'
     title:
       - '/Refactor/i'
-  - label: 'testing'
-    title:
-      - '/test:/i'
-      - '/add test/i'
+  - label: ':test_tube: testing'
     files:
       - 'test_*'
       - 'conftest.py'
-  - label: 'documentation'
+  - label: ':book: documentation'
     title:
       - '/docs:/i'
     files:
       - '*.md'
       - 'mkdocs.yml'
-  - label: 'ci'
-    title:
-      - '/ci:/i'
+  - label: ':construction_worker_woman: ci'
     files:
       - '.github/*'
-  - label: 'dependencies'
+  - label: ':recycle: dependencies'
     title:
       - '/bump/i'
-  - label: 'deprecation'
+  - label: ':file_cabinet: deprecation'
     title:
       - '/Deprecate/i'
 
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
-exclude-contributors:
-  - 'tr4nt0r'
+
 
 version-resolver:
   major:
     labels:
-      - 'major'
       - 'breaking'
   minor:
     labels:
-      - 'minor'
       - 'feature'
-  patch:
-    labels:
-      - 'patch'
-      - 'bug'
   default: patch
 
 template: |
-  ## Changes
+  ## What's Changed
 
   $CHANGES
 
-  Special thanks to: $CONTRIBUTORS
+  Contributors: $CONTRIBUTORS
