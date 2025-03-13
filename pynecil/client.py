@@ -194,14 +194,10 @@ class Pynecil:
         if self.device_info.is_synced:
             return self.device_info
 
-        try:
-            self.device_info.build = await self.read(CharBulk.BUILD)
-            self.device_info.device_sn = await self.read(CharBulk.DEVICE_SN)
-            self.device_info.device_id = await self.read(CharBulk.DEVICE_ID)
-            self.device_info.is_synced = True
-        except (BleakError, TimeoutError) as e:
-            _LOGGER.debug("Get device characteristics exception: %s", e)
-            raise CommunicationError from e
+        self.device_info.build = await self.read(CharBulk.BUILD)
+        self.device_info.device_sn = await self.read(CharBulk.DEVICE_SN)
+        self.device_info.device_id = await self.read(CharBulk.DEVICE_ID)
+        self.device_info.is_synced = True
 
         return self.device_info
 
