@@ -152,6 +152,7 @@ class LanguageCode(Enum):
     YUE_HK = 17119
     ZH_CN = 44731
     ZH_TW = 34289
+    UZ = 60827
 
 
 class BatteryType(Enum):
