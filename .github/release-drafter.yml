@@ -37,6 +37,7 @@ categories:
     collapse-after: 5
 exclude-labels:
   - ':arrow_up: bump'
+  - 'skip-changelog'
 
 autolabeler:
   - label: ':rocket: feature'
@@ -71,15 +72,17 @@ autolabeler:
 
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
+exclude-contributors:
+  - 'dependabot'
 
 
 version-resolver:
   major:
     labels:
-      - 'breaking'
+      - ':boom: breaking change'
   minor:
     labels:
-      - 'feature'
+      - ':rocket: feature'
   default: patch
 
 template: |
