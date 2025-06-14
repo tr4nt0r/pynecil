@@ -1,6 +1,22 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": [
-        "config:recommended"
-    ]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "rebaseWhen": "behind-base-branch",
+    "labels": [
+    ":recycle: dependencies"
+  ],
+  "commitMessageTopic": "{{depName}}",
+  "commitMessageAction": "Bump",
+  "packageRules": [
+    {
+      "matchManagers": [
+        "pep621"
+      ],
+      "addLabels": [
+        ":snake: python"
+      ]
+    }
+  ]
 }
