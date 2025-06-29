@@ -26,6 +26,6 @@ def mock_bleak_scanner() -> Generator[AsyncMock]:
         client = mock_client.return_value
 
         client.find_device_by_filter.return_value = BLEDevice(
-            address="AA:BB:CC:DD:EE:FF", name="Pinecil-ABCDEF", rssi=-50, details={}
+            address="AA:BB:CC:DD:EE:FF", name="Pinecil-ABCDEF", details={}
         )
         yield client
