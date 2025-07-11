@@ -14,7 +14,7 @@ Python library to communicate with Pinecil V2 soldering irons via Bluetooth
 ## 📖 Documentation
 
 - **Full Documentation**: [https://tr4nt0r.github.io/pynecil](https://tr4nt0r.github.io/pynecil)
-- **Source Code**: [ttps://github.com/tr4nt0r/pynecil](ttps://github.com/tr4nt0r/pynecil)
+- **Source Code**: [https://github.com/tr4nt0r/pynecil](https://github.com/tr4nt0r/pynecil)
 
 ---
 
