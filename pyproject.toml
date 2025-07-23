@@ -36,7 +36,7 @@ dependencies = [
     "pytest==8.4.1",
     "pytest-cov==6.2.1",
     "mkdocs-material==9.6.15",
-    "mkdocstrings[python]==0.29.1",
+    "mkdocstrings[python]==0.30.0",
     "pytest-asyncio==1.1.0",
 ]
 
