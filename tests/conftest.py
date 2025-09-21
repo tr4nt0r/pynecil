@@ -19,6 +19,16 @@ def mock_bleak_client() -> Generator[AsyncMock]:
 
 
 @pytest.fixture
+def mock_establish_connection(mock_bleak_client: AsyncMock) -> Generator[AsyncMock]:
+    """Mock bleak_retry_connector."""
+    with patch(
+        "pynecil.client.establish_connection",
+        return_value=mock_bleak_client,
+    ) as mock_setup_entry:
+        yield mock_setup_entry
+
+
+@pytest.fixture
 def mock_bleak_scanner() -> Generator[AsyncMock]:
     """Mock bleak scanner."""
 

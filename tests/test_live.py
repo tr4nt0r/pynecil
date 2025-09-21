@@ -49,7 +49,7 @@ async def test_discover_timeout(mock_bleak_scanner: AsyncMock):
     assert result is None
 
 
-@pytest.mark.usefixtures("mock_bleak_scanner")
+@pytest.mark.usefixtures("mock_bleak_scanner", "mock_establish_connection")
 async def test_connect_success(mock_bleak_client: AsyncMock):
     """Test connection success."""
     mock_bleak_client.is_connected = False
@@ -60,15 +60,19 @@ async def test_connect_success(mock_bleak_client: AsyncMock):
     mock_bleak_client.connect.assert_awaited_once()
 
 
+@pytest.mark.usefixtures("mock_bleak_scanner", "mock_establish_connection")
 async def test_connect_already_connected(mock_bleak_client: AsyncMock):
     """Test connection when already connected."""
 
     client = Pynecil("AA:BB:CC:DD:EE:FF")
+    await client.connect()
     assert client.is_connected
+
     await client.connect()
     mock_bleak_client.connect.assert_not_awaited()
 
 
+@pytest.mark.usefixtures("mock_bleak_scanner", "mock_establish_connection")
 async def test_connect_reconnect(mock_bleak_client: AsyncMock):
     """Test reconnect after disconnection."""
 
@@ -81,16 +85,19 @@ async def test_connect_reconnect(mock_bleak_client: AsyncMock):
     mock_bleak_client.disconnect.assert_awaited_once()
 
 
+@pytest.mark.usefixtures("mock_bleak_scanner", "mock_establish_connection")
 async def test_disconnect(mock_bleak_client: AsyncMock):
     """Test disconnection."""
 
     client = Pynecil("AA:BB:CC:DD:EE:FF")
+    await client.connect()
     client.client_disconnected = True
     await client.disconnect()
     mock_bleak_client.disconnect.assert_awaited_once()
     assert not client.client_disconnected
 
 
+@pytest.mark.usefixtures("mock_bleak_scanner", "mock_establish_connection")
 async def test_get_device_info_success(mock_bleak_client: AsyncMock):
     """Test get_device_info success."""
 
@@ -130,6 +137,7 @@ async def test_get_device_info_cached(mock_bleak_client: AsyncMock):
     mock_bleak_client.read_gatt_char.assert_not_awaited()
 
 
+@pytest.mark.usefixtures("mock_bleak_scanner", "mock_establish_connection")
 async def test_get_device_info_bleak_error(mock_bleak_client: AsyncMock):
     """Test get_device_info with BleakError."""
 
@@ -140,6 +148,7 @@ async def test_get_device_info_bleak_error(mock_bleak_client: AsyncMock):
         await client.get_device_info()
 
 
+@pytest.mark.usefixtures("mock_bleak_scanner", "mock_establish_connection")
 async def test_get_device_info_timeout_error(mock_bleak_client: AsyncMock):
     """Test get_device_info with TimeoutError."""
 
@@ -150,6 +159,7 @@ async def test_get_device_info_timeout_error(mock_bleak_client: AsyncMock):
         await client.get_device_info()
 
 
+@pytest.mark.usefixtures("mock_bleak_scanner", "mock_establish_connection")
 async def test_get_live_data(mock_bleak_client: AsyncMock):
     """Test get_live_data function."""
 
@@ -176,6 +186,7 @@ async def test_get_live_data(mock_bleak_client: AsyncMock):
     mock_bleak_client.read_gatt_char.assert_awaited_once()
 
 
+@pytest.mark.usefixtures("mock_bleak_scanner", "mock_establish_connection")
 async def test_get_live_data_communication_error(mock_bleak_client: AsyncMock):
     """Test get_live_data with communication error."""
 
@@ -186,6 +197,7 @@ async def test_get_live_data_communication_error(mock_bleak_client: AsyncMock):
         await client.get_live_data()
 
 
+@pytest.mark.usefixtures("mock_bleak_scanner", "mock_establish_connection")
 async def test_get_settings_all(mock_bleak_client: AsyncMock):
     """Test get_settings function."""
 
@@ -331,6 +343,7 @@ async def test_get_settings_all(mock_bleak_client: AsyncMock):
         (CharSetting.TIP_TYPE, b"\x01\x00", TipType.TS100_LONG),
     ],
 )
+@pytest.mark.usefixtures("mock_bleak_scanner", "mock_establish_connection")
 async def test_get_settings_specific(
     mock_bleak_client: AsyncMock,
     setting: CharSetting,
@@ -697,6 +710,7 @@ async def test_get_settings_communication_error(mock_bleak_client: AsyncMock):
         ),
     ],
 )
+@pytest.mark.usefixtures("mock_bleak_scanner", "mock_establish_connection")
 async def test_read_success(
     mock_bleak_client: AsyncMock,
     setting: CharSetting | CharLive,
@@ -714,6 +728,7 @@ async def test_read_success(
     mock_bleak_client.read_gatt_char.assert_awaited_once_with(characteristic)
 
 
+@pytest.mark.usefixtures("mock_bleak_scanner", "mock_establish_connection")
 async def test_read_invalid_characteristic(mock_bleak_client: AsyncMock):
     """Test read function with invalid characteristic."""
 
@@ -723,6 +738,7 @@ async def test_read_invalid_characteristic(mock_bleak_client: AsyncMock):
     mock_bleak_client.read_gatt_char.assert_not_awaited()
 
 
+@pytest.mark.usefixtures("mock_bleak_scanner", "mock_establish_connection")
 async def test_read_communication_error(mock_bleak_client: AsyncMock):
     """Test read function with communication error."""
 
@@ -989,6 +1005,7 @@ async def test_read_communication_error(mock_bleak_client: AsyncMock):
         ),
     ],
 )
+@pytest.mark.usefixtures("mock_bleak_scanner", "mock_establish_connection")
 async def test_write_success(
     mock_bleak_client: AsyncMock,
     setting: CharSetting,
@@ -1005,6 +1022,7 @@ async def test_write_success(
     mock_bleak_client.write_gatt_char.assert_called_once_with(characteristic, raw_value)
 
 
+@pytest.mark.usefixtures("mock_bleak_scanner", "mock_establish_connection")
 async def test_write_clip_values(mock_bleak_client: AsyncMock):
     """Test write function with invalid value."""
 
@@ -1023,6 +1041,7 @@ async def test_write_clip_values(mock_bleak_client: AsyncMock):
     )
 
 
+@pytest.mark.usefixtures("mock_bleak_scanner", "mock_establish_connection")
 async def test_write_communication_error(mock_bleak_client: AsyncMock):
     """Test write function with communication error."""
 
