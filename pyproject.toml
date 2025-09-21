@@ -4,7 +4,7 @@ exclude_lines = [
 ]
 
 [tool.ruff]
-target-version = "py312"
+target-version = "py313"
 
 [tool.ruff.lint]
 extend-select = ["I", "TRY", "UP", "D", "W"]
@@ -26,7 +26,7 @@ commit_extra_args = ["-e"]
 path = "pynecil/__init__.py"
 
 [tool.hatch.envs.default]
-python = "3.12"
+python = "3.13"
 installer = "uv"
 dependencies = [
     "aiohttp==3.12.15",
@@ -40,6 +40,18 @@ dependencies = [
     "mkdocstrings[python]==0.30.0",
     "pytest-asyncio==1.1.0",
 ]
+
+[tool.hatch.envs.hatch-test]
+parallel = true
+extra-dependencies = [
+  "pytest-asyncio==1.1.0",
+  "pytest-cov==6.2.1",
+]
+extra-args = ["--cov-report=xml", "-vv"]
+type = "virtual"
+
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.13", "3.12", "3.11", "3.10"]
 
 [tool.hatch.envs.default.scripts]
 test = "pytest"
