@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING, Any, cast
 from bleak import BleakClient, BleakScanner
 from bleak.backends.device import BLEDevice
 from bleak.exc import BleakError
+from bleak_retry_connector import BleakClientWithServiceCache, establish_connection
 
 from . import const
 from .exceptions import CommunicationError
@@ -79,6 +80,7 @@ class Pynecil:
     """
 
     client_disconnected: bool = False
+    _client: BleakClient | None = None
 
     def __init__(
         self,
@@ -115,15 +117,8 @@ class Pynecil:
         else:
             self.device_info = DeviceInfoResponse(address=address_or_ble_device)
 
-        def _disconnected_callback(client: BleakClient) -> None:
-            _LOGGER.debug("Disconnected from %s", client.address)
-            self.client_disconnected = True
-            self.device_info.is_synced = False
-
-        self._client = BleakClient(
-            address_or_ble_device,
-            disconnected_callback=disconnected_callback or _disconnected_callback,
-        )
+        self.address_or_ble_device = address_or_ble_device
+        self.disconnected_callback = disconnected_callback
 
     @property
     def is_connected(self) -> bool:
@@ -135,7 +130,7 @@ class Pynecil:
             `True` if the client is connected, `False` otherwise.
 
         """
-        return self._client.is_connected
+        return self._client is not None and self._client.is_connected
 
     async def connect(self) -> None:
         """Establish or re-establish a connection to the device.
@@ -159,6 +154,30 @@ class Pynecil:
             If an error occurs during the connection attempt.
 
         """
+
+        def _disconnected_callback(client: BleakClient) -> None:
+            _LOGGER.debug("Disconnected from %s", client.address)
+            self.client_disconnected = True
+            self.device_info.is_synced = False
+
+        if isinstance(self.address_or_ble_device, str):
+            device = await BleakScanner.find_device_by_address(
+                self.address_or_ble_device
+            )
+        else:
+            device = self.address_or_ble_device
+
+        if not device:
+            raise CommunicationError("Device not found")
+
+        if self._client is None:
+            self._client = await establish_connection(
+                BleakClientWithServiceCache,
+                device,
+                device.name or "Unknown Device",
+                self.disconnected_callback or _disconnected_callback,
+            )
+
         if not self._client.is_connected:
             if self.client_disconnected:  # close stale connection
                 await self.disconnect()
@@ -166,7 +185,8 @@ class Pynecil:
 
     async def disconnect(self) -> None:
         """Disconnect from the Pinecil device."""
-        await self._client.disconnect()
+        if self._client is not None:
+            await self._client.disconnect()
         self.client_disconnected = False
 
     async def get_device_info(self) -> DeviceInfoResponse:
@@ -292,6 +312,8 @@ class Pynecil:
 
         try:
             await self.connect()
+            if TYPE_CHECKING:
+                assert self._client
             result = await self._client.read_gatt_char(uuid)
             _LOGGER.debug(
                 "Read characteristic %s, result: %s", str(uuid), decode(result)
@@ -329,6 +351,8 @@ class Pynecil:
         data = validate(convert(value))
         try:
             await self.connect()
+            if TYPE_CHECKING:
+                assert self._client
             await self._client.write_gatt_char(uuid, encode_int(data))
             _LOGGER.debug("Wrote characteristic %s with value: %s", str(uuid), value)
         except (BleakError, TimeoutError) as e:
