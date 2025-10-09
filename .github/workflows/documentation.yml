@@ -34,7 +34,7 @@ jobs:
         python-version: '3.14'
     - name: Install dependencies
       run: |
-        pipx install hatch --python python3.13
+        pipx install hatch --python python3.14
     - name: Build
       run: hatch run docs-build
     - name: Upload artifact
