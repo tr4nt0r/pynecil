@@ -30,7 +30,7 @@ python = "3.13"
 installer = "uv"
 dependencies = [
     "aiohttp==3.13.0",
-    "bleak==1.1.0",
+    "bleak==1.1.1",
     "bleak-retry-connector==4.3.0",
     "mypy==1.17.1",
     "ruff==0.12.9",
