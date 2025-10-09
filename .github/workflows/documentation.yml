@@ -35,7 +35,6 @@ jobs:
     - name: Install dependencies
       run: |
         pipx install hatch --python python3.13
-        pipx inject hatch click==8.2.1 --force
     - name: Build
       run: hatch run docs-build
     - name: Upload artifact
