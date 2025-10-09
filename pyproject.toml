@@ -38,7 +38,7 @@ dependencies = [
     "pytest-cov==6.2.1",
     "mkdocs-material==9.6.17",
     "mkdocstrings[python]==0.30.0",
-    "pytest-asyncio==1.1.0",
+    "pytest-asyncio==1.2.0",
 ]
 
 [tool.hatch.envs.hatch-test]
