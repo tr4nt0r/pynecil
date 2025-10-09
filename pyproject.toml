@@ -32,7 +32,7 @@ dependencies = [
     "aiohttp==3.13.0",
     "bleak==1.1.1",
     "bleak-retry-connector==4.4.3",
-    "mypy==1.17.1",
+    "mypy==1.18.2",
     "ruff==0.12.9",
     "pytest==8.4.1",
     "pytest-cov==6.2.1",
