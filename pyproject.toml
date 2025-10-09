@@ -8,7 +8,7 @@ target-version = "py314"
 
 [tool.ruff.lint]
 extend-select = ["I", "TRY", "UP", "D", "W"]
-extend-ignore = ["D213", "D202", "D203", "D213", "UP038", "TRY003"]
+extend-ignore = ["D213", "D202", "D203", "D213", "TRY003"]
 
 [tool.pytest.ini_options]
 addopts = "--cov=pynecil/ --cov-report=term-missing"
@@ -33,7 +33,7 @@ dependencies = [
     "bleak==1.1.1",
     "bleak-retry-connector==4.4.3",
     "mypy==1.18.2",
-    "ruff==0.12.9",
+    "ruff==0.14.0",
     "pytest==8.4.1",
     "pytest-cov==6.2.1",
     "mkdocs-material==9.6.17",
