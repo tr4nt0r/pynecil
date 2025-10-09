@@ -45,7 +45,7 @@ dependencies = [
 parallel = true
 extra-dependencies = [
   "pytest-asyncio==1.1.0",
-  "pytest-cov==6.2.1",
+  "pytest-cov==7.0.0",
 ]
 extra-args = ["--cov-report=xml", "-vv"]
 type = "virtual"
