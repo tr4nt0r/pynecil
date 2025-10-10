@@ -26,7 +26,7 @@ commit_extra_args = ["-e"]
 path = "pynecil/__init__.py"
 
 [tool.hatch.envs.default]
-python = "3.13"
+python = "3.14"
 installer = "uv"
 dependencies = [
     "aiohttp==3.13.0",
@@ -51,7 +51,7 @@ extra-args = ["--cov-report=xml", "-vv"]
 type = "virtual"
 
 [[tool.hatch.envs.hatch-test.matrix]]
-python = ["3.13", "3.12", "3.11", "3.10"]
+python = ["3.14", "3.13", "3.12", "3.11", "3.10"]
 
 [tool.hatch.envs.default.scripts]
 test = "pytest"
@@ -90,6 +90,7 @@ requires-python = ">=3.11"
 dependencies = [
     "bleak>=0.22.0",
     "bleak-retry-connector>=4.3.0",
+    "bluetooth-adapters>=2.1.0;python_version>='3.14'",
     "aiohttp>=3.11.10"
 ]
 
