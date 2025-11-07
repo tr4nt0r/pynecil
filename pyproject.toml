@@ -56,18 +56,18 @@ python = ["3.14", "3.13", "3.12", "3.11", "3.10"]
 [tool.hatch.envs.default.scripts]
 test = "pytest"
 test-cov-xml = "pytest --cov-report=xml"
-lint = [
-  "ruff format .",
-  "ruff --fix .",
-  "mypy pynecil/",
-]
-lint-check = [
-  "ruff format --check .",
-  "ruff check .",
+
+type-check = [
   "mypy pynecil/",
 ]
 docs-serve = "mkdocs serve"
 docs-build = "mkdocs build"
+
+[tool.hatch.envs.hatch-static-analysis]
+dependencies = [
+    "ruff==0.14.4",
+]
+config-path = "none"
 
 [build-system]
 requires = ["hatchling", "hatch-regex-commit"]
