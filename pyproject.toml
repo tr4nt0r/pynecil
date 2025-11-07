@@ -33,7 +33,7 @@ dependencies = [
     "bleak==1.1.1",
     "bleak-retry-connector==4.4.3",
     "mypy==1.18.2",
-    "ruff==0.14.0",
+    "ruff==0.14.4",
     "pytest==8.4.2",
     "pytest-cov==7.0.0",
     "mkdocs-material==9.6.21",
