@@ -10,12 +10,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v5
-    - uses: actions/setup-python@v6
-      with:
-        python-version: '3.14' 
-    - name: Install dependencies
-      run: |
-        pipx install hatch --python python3.14
+    - name: Install Hatch
+      uses: pypa/hatch@install
     - name: Lint and typecheck
       run: |
         hatch run lint-check
@@ -40,9 +36,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v5
-    - name: Install dependencies
-      shell: bash
-      run: pipx install hatch
+    - name: Install Hatch
+      uses: pypa/hatch@install
     - name: mint API token
       id: mint-token
       run: |
