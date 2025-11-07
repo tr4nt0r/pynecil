@@ -432,7 +432,7 @@ def decode_live_data(value: bytearray) -> LiveDataResponse:
         - estimated_power: float (normalized)
 
     """
-    data = struct.unpack("14I", value)
+    data = struct.unpack("<14I", value)
     return LiveDataResponse(
         data[0],
         data[1],
