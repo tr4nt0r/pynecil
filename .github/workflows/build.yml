@@ -9,7 +9,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - name: Install Hatch
       uses: pypa/hatch@install
     - name: Lint and typecheck
@@ -36,7 +36,7 @@ jobs:
         id-token: write
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - name: Install Hatch
       uses: pypa/hatch@install
     - name: mint API token
