@@ -28,13 +28,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v6
-    - name: Set up Python
-      uses: actions/setup-python@v6
-      with:
-        python-version: '3.14'
-    - name: Install dependencies
-      run: |
-        pipx install hatch --python python3.14
+    - name: Install Hatch
+      uses: pypa/hatch@install
     - name: Build
       run: hatch run docs-build
     - name: Upload artifact
