@@ -16,6 +16,5 @@
       "matchManagers": ["pep621"],
       "addLabels": [":snake: python"]
     }
-  ],
-  "rangeStrategy": "bump"
+  ]
 }
