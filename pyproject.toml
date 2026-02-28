@@ -29,7 +29,7 @@ path = "pynecil/__init__.py"
 python = "3.14"
 installer = "uv"
 dependencies = [
-    "aiohttp==3.13.2",
+    "aiohttp==3.13.3",
     "bleak==1.1.1",
     "bleak-retry-connector==4.4.3",
     "mypy==1.18.2",
