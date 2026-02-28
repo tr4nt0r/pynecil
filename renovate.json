@@ -1,21 +1,20 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": ["config:best-practices"],
-    "pep621": {
-        "enabled": true
-    },
-    "poetry": {
-        "enabled": false
-    },
-    "rebaseWhen": "behind-base-branch",
-    "labels": [":recycle: dependencies"],
-    "commitMessagePrefix": "⬆️",
-    "commitMessageTopic": "{{depName}}",
-    "commitMessageAction": "Bump",
-    "packageRules": [
-        {
-            "matchManagers": ["pep621"],
-            "addLabels": [":snake: python"]
-        }
-    ]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "labels": [":recycle: dependencies"],
+  "commitMessagePrefix": "⬆️",
+  "commitMessageTopic": "{{depName}}",
+  "commitMessageAction": "Bump",
+  "pep621": {
+    "enabled": true
+  },
+  "poetry": {
+    "enabled": false
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["pep621"],
+      "addLabels": [":snake: python"]
+    }
+  ]
 }
