@@ -31,7 +31,7 @@ installer = "uv"
 dependencies = [
     "aiohttp==3.13.3",
     "bleak==2.1.1",
-    "bleak-retry-connector==4.5.0",
+    "bleak-retry-connector==4.6.0",
     "mypy==1.19.1",
     "ruff==0.15.5",
     "pytest==9.0.2",
