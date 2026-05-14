@@ -33,7 +33,7 @@ dependencies = [
     "bleak==3.0.2",
     "bleak-retry-connector==4.6.0",
     "mypy==2.1.0",
-    "ruff==0.15.12",
+    "ruff==0.15.13",
     "pytest==9.0.3",
     "pytest-cov==7.1.0",
     "mkdocs-material==9.7.6",
@@ -65,7 +65,7 @@ docs-build = "mkdocs build"
 
 [tool.hatch.envs.hatch-static-analysis]
 dependencies = [
-    "ruff==0.15.12",
+    "ruff==0.15.13",
 ]
 config-path = "none"
 
