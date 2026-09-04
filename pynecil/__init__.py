@@ -35,7 +35,6 @@ __all__ = [
     "CharSetting",
     "CommunicationError",
     "DeviceInfoResponse",
-    "discover",
     "IronOSUpdate",
     "LanguageCode",
     "LatestRelease",
@@ -50,6 +49,7 @@ __all__ = [
     "SettingsDataResponse",
     "TempUnit",
     "TipType",
-    "UpdateException",
     "USBPDMode",
+    "UpdateException",
+    "discover",
 ]
