@@ -31,10 +31,11 @@ pip install pynecil
 
 ```python
 import asyncio
-from pynecil import CharSetting, discover, Pynecil 
+from pynecil import CharSetting, discover, Pynecil
+
 
 async def main():
-    
+
     device = await discover()
     client = Pynecil(device)
 
@@ -43,6 +44,7 @@ async def main():
     live_data = await client.get_live_data()
 
     await client.write(CharSetting.SETPOINT_TEMP, 350)
+
 
 asyncio.run(main())
 ```
